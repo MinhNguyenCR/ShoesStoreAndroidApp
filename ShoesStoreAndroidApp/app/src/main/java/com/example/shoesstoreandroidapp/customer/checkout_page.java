@@ -1,6 +1,11 @@
 package com.example.shoesstoreandroidapp.customer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +22,7 @@ import java.util.List;
 
 public class checkout_page extends AppCompatActivity {
 
+    Button process_payment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +37,16 @@ public class checkout_page extends AppCompatActivity {
         ProductAdapter adapter = new ProductAdapter(productList);
         rvProductList.setLayoutManager(new LinearLayoutManager(this));
         rvProductList.setAdapter(adapter);
+
+        process_payment = findViewById(R.id.processPaymentBtn);
+        process_payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(checkout_page.this, PaymentActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 }
