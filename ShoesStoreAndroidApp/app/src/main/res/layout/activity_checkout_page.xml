@@ -149,6 +149,7 @@
 
         <!-- Nút đặt hàng -->
         <Button
+            android:id="@+id/processPaymentBtn"
             android:text="ĐẶT HÀNG"
             android:textAllCaps="true"
             android:textColor="#FFFFFF"
