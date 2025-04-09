@@ -54,6 +54,10 @@ public class shoes_item_adapter extends RecyclerView.Adapter<shoes_item_adapter.
             return mList.size();
         return 0;
     }
+    public void updateList(List<shoesModel> newList) {
+        this.mList = newList;
+        notifyDataSetChanged();
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvName;

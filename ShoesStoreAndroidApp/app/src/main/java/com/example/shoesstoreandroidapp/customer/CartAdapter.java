@@ -1,6 +1,7 @@
 package com.example.shoesstoreandroidapp.customer;
 
 import android.content.Context;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,8 +74,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         private TextView tvName;
         private TextView tvPrice;
         private ImageView imgvImg;
-        private Button btnMore;
-        private Button btnLess;
+        private ImageButton btnMore;
+        private ImageButton btnLess;
         public TextView quantity;
         public ImageButton deleteBtn;
 
@@ -84,8 +85,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             tvPrice = (TextView) itemView.findViewById(R.id.productPrice);
             quantity = (TextView) itemView.findViewById(R.id.productQuantity);
             imgvImg = (ImageView) itemView.findViewById(R.id.productImage);
-            btnMore = (Button) itemView.findViewById(R.id.increaseQuantityButton);
-            btnLess = (Button) itemView.findViewById(R.id.decreaseQuantityButton);
+            btnMore = (ImageButton) itemView.findViewById(R.id.increaseQuantityButton);
+            btnLess = (ImageButton) itemView.findViewById(R.id.decreaseQuantityButton);
             deleteBtn = itemView.findViewById(R.id.deleteBtn);
 
             btnMore.setOnClickListener(new View.OnClickListener() {

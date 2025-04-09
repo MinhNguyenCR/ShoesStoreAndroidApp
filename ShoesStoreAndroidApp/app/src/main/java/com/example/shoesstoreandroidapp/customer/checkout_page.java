@@ -6,6 +6,7 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,16 +24,33 @@ import java.util.List;
 public class checkout_page extends AppCompatActivity {
 
     Button process_payment;
+    TextView totalMoney;
+    RadioButton radioCOD;
+    RadioButton radioVNPay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_checkout_page);
         RecyclerView rvProductList = findViewById(R.id.rvProductList);
+        radioCOD = findViewById(R.id.radioCOD);
+        radioVNPay = findViewById(R.id.radioVNPay);
+        //List<Product> productList = new ArrayList<>();
+        ArrayList<CartItem> receivedItems = (ArrayList<CartItem>) getIntent().getSerializableExtra("cartItems");
+
         List<Product> productList = new ArrayList<>();
-        productList.add(new Product("Nike Mercurial Superfly 9 Elite SE", 10, 7239000));
-        productList.add(new Product("Adidas Predator Accuracy", 2, 4000000));
-        productList.add(new Product("Puma Ultra Ultimate", 1, 3100000));
+        for (CartItem cartItem : receivedItems) {
+            productList.add(new Product(
+                    cartItem.getProduct().getName(),
+                    cartItem.getQuantity(),
+                    (int) cartItem.getProduct().getPrice()
+            ));
+        }
+        totalMoney = findViewById(R.id.totalMoney);
+        double total = getIntent().getDoubleExtra("totalMoney", 0); // 👈 Nhận tổng tiền
+        totalMoney.setText(String.format("%,.0f", total));
+
+
 
         ProductAdapter adapter = new ProductAdapter(productList);
         rvProductList.setLayoutManager(new LinearLayoutManager(this));
@@ -42,10 +60,19 @@ public class checkout_page extends AppCompatActivity {
         process_payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(checkout_page.this, PaymentActivity.class);
-                startActivity(intent);
+                if(radioVNPay.isChecked()){
+                    Intent intent = new Intent(checkout_page.this, PaymentActivity.class);
+                    intent.putExtra("total", total);
+                    startActivity(intent);
+                }
+                if(radioCOD.isChecked()){
+                    Intent intent = new Intent(checkout_page.this, PaymentSuccess.class);
+                    intent.putExtra("total", total);
+                    startActivity(intent);
+                }
             }
         });
+
 
 
     }
