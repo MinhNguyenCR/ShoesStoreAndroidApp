@@ -3,10 +3,12 @@ package com.example.shoesstoreandroidapp.customer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -25,6 +27,10 @@ public class main_page extends AppCompatActivity {
     private shoes_item_adapter shoesAdapter;
     private List<shoesModel> shoesList;
     private ImageButton toCart;
+    private ImageButton homeActive;
+    private ImageButton imgbtnNoti;
+    private SearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +44,7 @@ public class main_page extends AppCompatActivity {
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         categoryRecyclerView.setAdapter(adapter);
 
-
+        homeActive.setImageResource(R.drawable.home_icon_active);
 
 
         //shoes items
@@ -70,8 +76,44 @@ public class main_page extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        imgbtnNoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(main_page.this, notificationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        //search view
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Handle search query submission (optional)
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterShoes(newText);
+                return true;
+            }
+        });
+    }
+    private void filterShoes(String query) {
+        List<shoesModel> filteredList = new ArrayList<>();
+        for (shoesModel item : shoesList) {
+            if (item.getShoesName().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(item);
+            }
+        }
+        shoesAdapter.updateList(filteredList);
     }
     public void thamChieu(){
+
         toCart = findViewById(R.id.CartBtn);
+        homeActive = findViewById(R.id.imgbtnHome);
+        imgbtnNoti = findViewById(R.id.imgbtnNoti);
+        searchView = findViewById(R.id.searchView);
     }
 }

@@ -121,6 +121,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
+                android:id="@+id/totalMoney"
                 android:text="72,390,000đ"
                 android:textStyle="bold"
                 android:textSize="20sp"
@@ -137,11 +138,13 @@
             android:layout_marginBottom="24dp">
 
             <RadioButton
+                android:id="@+id/radioCOD"
                 android:text="Thanh toán khi nhận hàng"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <RadioButton
+                android:id="@+id/radioVNPay"
                 android:text="Thanh toán bằng VNPAY"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

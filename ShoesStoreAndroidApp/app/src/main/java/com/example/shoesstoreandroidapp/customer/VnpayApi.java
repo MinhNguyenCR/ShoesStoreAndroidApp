@@ -6,6 +6,6 @@ import retrofit2.http.Query;
 
 public interface VnpayApi {
     @GET("/api/payment/create")
-    Call<PaymentResponse> createPayment(@Query("amount") int amount);
+    Call<PaymentResponse> createPayment(@Query("amount") double amount);
 }
 

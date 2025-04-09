@@ -1,5 +1,6 @@
 package com.example.shoesstoreandroidapp.customer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -47,11 +48,19 @@ public class PaymentActivity extends AppCompatActivity {
         });
 
         vnpayApi = RetrofitClient.getRetrofit().create(VnpayApi.class);
+        Intent intent = getIntent();
+        double total = intent.getDoubleExtra("total", 0);
 
-        btnPay.setOnClickListener(v -> callPaymentApi(10000));
+        btnPay.setOnClickListener(v -> {
+            if (total > 0) {
+                callPaymentApi(total);
+            } else {
+                Toast.makeText(this, "Tổng tiền không hợp lệ", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void callPaymentApi(int amount) {
+    private void callPaymentApi(double amount) {
         vnpayApi.createPayment(amount).enqueue(new Callback<PaymentResponse>() {
             @Override
             public void onResponse(Call<PaymentResponse> call, Response<PaymentResponse> response) {

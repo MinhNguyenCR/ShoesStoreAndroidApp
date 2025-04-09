@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:layout_marginTop="14dp"
     android:padding="16dp">
 
     <TextView
+        android:layout_marginTop="14dp"
         android:id="@+id/cartTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:layout_marginTop="14dp"
         android:id="@+id/cartItemCount"
         android:layout_width="24dp"
         android:textStyle="bold"

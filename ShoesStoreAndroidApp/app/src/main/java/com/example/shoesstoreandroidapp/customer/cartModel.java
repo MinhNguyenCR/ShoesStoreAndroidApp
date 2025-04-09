@@ -1,6 +1,8 @@
 package com.example.shoesstoreandroidapp.customer;
 
-public class cartModel {
+import java.io.Serializable;
+
+public class cartModel implements Serializable {
     private String name;
     private double price;
     private int image;
