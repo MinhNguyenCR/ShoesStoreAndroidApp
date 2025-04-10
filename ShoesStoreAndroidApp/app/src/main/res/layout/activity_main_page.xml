@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_marginTop="30sp"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- Thanh menu -->
+
+    <!-- Thanh tìm kiếm -->
+
+    <!-- Tabs -->
+
+    <!-- Danh sách sản phẩm -->
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="648dp"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="Menu"
+            android:src="@android:drawable/ic_menu_sort_by_size"
+            tools:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+
+        <TextView
+            android:layout_width="332dp"
+            android:layout_height="106dp"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:text="Explore new shoes"
+            android:textSize="46sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/CartBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:contentDescription="Cart"
+            android:scaleType="fitCenter"
+            android:src="@drawable/cart" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_search_bar"
+        android:elevation="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.205">
+
+        <!-- Icon tìm kiếm -->
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="0dp"
+            app:queryHint="Search here..."
+            app:iconifiedByDefault="false"
+            android:layout_weight="8"
+            android:layout_height="match_parent"/>
+
+        <!-- Nút bộ lọc -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:background="@color/white"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_filter" />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/categoryRecyclerView"
+        android:layout_width="376dp"
+        android:layout_height="47dp"
+        android:orientation="horizontal"
+        android:overScrollMode="never"
+        android:paddingLeft="32dp"
+        android:paddingRight="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintVertical_bias="0.033" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shoes_item_recyclerView"
+        android:layout_width="352dp"
+        android:layout_height="463dp"
+        android:paddingBottom="30dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@+id/navigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryRecyclerView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.528"
+        app:layout_constraintStart_toEndOf="@+id/shoes_item_recyclerView"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:backgroundTint="#FFEB3B"
+            android:orientation="horizontal">
+            <ImageButton
+                android:id="@+id/imgbtnHome"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="7dp"
+                android:scaleType="fitCenter"
+                android:background="@color/white"
+                app:srcCompat="@drawable/home_icon" />
+
+
+
+            <ImageButton
+                android:id="@+id/imgbtnNoti"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                android:background="@color/white"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/bell_icon" />
+            <ImageButton
+                android:id="@+id/imgbtnUser"
+                android:layout_width="0dp"
+                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:background="@color/white"
+                app:srcCompat="@drawable/user_icon" />
+
+        </LinearLayout>
+    </com.google.android.material.navigation.NavigationView>
+
+    <!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="54sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:paddingRight="14dp"-->
+<!--        android:paddingLeft="14dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
+<!--        <ImageButton-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            android:background="@color/white"-->
+<!--            android:src="@drawable/home_icon"-->
+<!--            android:layout_height="match_parent">-->
+<!--        </ImageButton>-->
+<!--        <ImageButton-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="match_parent">-->
+<!--        </ImageButton>-->
+<!--        <ImageButton-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="match_parent">-->
+<!--        </ImageButton>-->
+<!--        <ImageButton-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height="match_parent">-->
+<!--        </ImageButton>-->
+<!--    </LinearLayout>-->
+    
+    
+</androidx.constraintlayout.widget.ConstraintLayout>
