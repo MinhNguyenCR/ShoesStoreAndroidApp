@@ -12,14 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoesstoreandroidapp.R;
+import com.example.shoesstoreandroidapp.UserProfileActivity;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class notificationActivity extends AppCompatActivity {
 
@@ -30,6 +29,8 @@ public class notificationActivity extends AppCompatActivity {
     private ImageButton imgbtnNoti;
     private Gson gson;
     private ImageButton homeActive;
+    private ImageButton imgbtnOrderHistory;
+    ImageButton imgbtnUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,24 @@ public class notificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(notificationActivity.this, main_page.class);
+                startActivity(intent);
+            }
+        });
+
+        imgbtnUser = findViewById(R.id.imgbtnUser);
+        imgbtnOrderHistory = findViewById(R.id.imgbtnOrderHistory);
+
+        imgbtnUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(notificationActivity.this, UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        imgbtnOrderHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(notificationActivity.this, PurchaseHistory.class);
                 startActivity(intent);
             }
         });

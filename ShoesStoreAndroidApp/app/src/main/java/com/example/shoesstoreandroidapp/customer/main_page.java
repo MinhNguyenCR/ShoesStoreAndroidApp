@@ -3,20 +3,17 @@ package com.example.shoesstoreandroidapp.customer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoesstoreandroidapp.R;
+import com.example.shoesstoreandroidapp.UserProfileActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +27,9 @@ public class main_page extends AppCompatActivity {
     private ImageButton homeActive;
     private ImageButton imgbtnNoti;
     private SearchView searchView;
+    private ImageButton imgbtnUser;
+    private ImageButton imgbtnOrderHistory;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +83,20 @@ public class main_page extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        imgbtnUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(main_page.this, UserProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        imgbtnOrderHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(main_page.this, PurchaseHistory.class);
+                startActivity(intent);
+            }
+        });
 
 
         //search view
@@ -115,5 +129,7 @@ public class main_page extends AppCompatActivity {
         homeActive = findViewById(R.id.imgbtnHome);
         imgbtnNoti = findViewById(R.id.imgbtnNoti);
         searchView = findViewById(R.id.searchView);
+        imgbtnUser = findViewById(R.id.imgbtnUser);
+        imgbtnOrderHistory = findViewById(R.id.imgbtnOrderHistory);
     }
 }

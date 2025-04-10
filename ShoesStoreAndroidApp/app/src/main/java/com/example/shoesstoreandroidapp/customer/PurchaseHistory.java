@@ -1,4 +1,4 @@
-package com.example.shoesstoreandroidapp;
+package com.example.shoesstoreandroidapp.customer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,52 +7,53 @@ import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-import com.example.shoesstoreandroidapp.customer.OrderHistoryModel;
-import com.example.shoesstoreandroidapp.customer.PurchaseHistory;
-import com.example.shoesstoreandroidapp.customer.main_page;
-import com.example.shoesstoreandroidapp.customer.notificationActivity;
+import com.example.shoesstoreandroidapp.R;
+import com.example.shoesstoreandroidapp.UserProfileActivity;
 
-public class UserProfileActivity extends AppCompatActivity {
-
+public class PurchaseHistory extends AppCompatActivity {
+    ImageButton imgbtnOrderHistory;
     ImageButton imgbtnUser;
     ImageButton imgbtnHome;
     ImageButton imgbtnNoti;
-    ImageButton imgbtnOrderHistory;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_user_profile);
+        setContentView(R.layout.activity_purchase_history);
         thamchieu();
-        imgbtnUser.setImageResource(R.drawable.user_icon_active);
-
+        imgbtnOrderHistory.setImageResource(R.drawable.list_icon_active);
         imgbtnNoti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserProfileActivity.this, notificationActivity.class);
+                Intent intent = new Intent(PurchaseHistory.this, notificationActivity.class);
                 startActivity(intent);
             }
         });
         imgbtnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserProfileActivity.this, main_page.class);
+                Intent intent = new Intent(PurchaseHistory.this, main_page.class);
                 startActivity(intent);
             }
         });
-        imgbtnOrderHistory.setOnClickListener(new View.OnClickListener() {
+        imgbtnUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserProfileActivity.this, PurchaseHistory.class);
+                Intent intent = new Intent(PurchaseHistory.this, UserProfileActivity.class);
                 startActivity(intent);
             }
         });
     }
     private void thamchieu(){
+        imgbtnOrderHistory = findViewById(R.id.imgbtnOrderHistory);
         imgbtnUser = findViewById(R.id.imgbtnUser);
         imgbtnHome = findViewById(R.id.imgbtnHome);
         imgbtnNoti = findViewById(R.id.imgbtnNoti);
-        imgbtnOrderHistory = findViewById(R.id.imgbtnOrderHistory);
+
     }
 }

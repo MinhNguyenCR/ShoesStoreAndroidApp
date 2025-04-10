@@ -47,7 +47,7 @@ public class checkout_page extends AppCompatActivity {
             ));
         }
         totalMoney = findViewById(R.id.totalMoney);
-        double total = getIntent().getDoubleExtra("totalMoney", 0); // 👈 Nhận tổng tiền
+        double total = getIntent().getDoubleExtra("totalMoney", 0);
         totalMoney.setText(String.format("%,.0f", total));
 
 

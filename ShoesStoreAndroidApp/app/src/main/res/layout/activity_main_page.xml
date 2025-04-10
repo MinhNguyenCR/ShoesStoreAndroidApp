@@ -168,6 +168,15 @@
                 android:layout_weight="1"
                 app:srcCompat="@drawable/bell_icon" />
             <ImageButton
+                android:id="@+id/imgbtnOrderHistory"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/list_icon" />
+            <ImageButton
                 android:id="@+id/imgbtnUser"
                 android:layout_width="0dp"
                 android:padding="5dp"

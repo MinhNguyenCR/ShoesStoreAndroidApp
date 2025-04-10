@@ -97,7 +97,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     CurrentQuantity++;
                     quantity.setText(String.valueOf(CurrentQuantity));
                     if (quantityChangeListener != null) {
-                        quantityChangeListener.onQuantityChanged(); // Thông báo thay đổi
+                        quantityChangeListener.onQuantityChanged();
                     }
                 }
             });
@@ -110,7 +110,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                         CurrentQuantity--;
                         quantity.setText(String.valueOf(CurrentQuantity));
                         if (quantityChangeListener != null) {
-                            quantityChangeListener.onQuantityChanged(); // Thông báo thay đổi
+                            quantityChangeListener.onQuantityChanged();
                         }
                     } else
                         Toast.makeText(context, "Không được nhỏ hơn 1", Toast.LENGTH_SHORT).show();
