@@ -10,15 +10,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoesstoreandroidapp.R;
 import com.example.shoesstoreandroidapp.UserProfileActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PurchaseHistory extends AppCompatActivity {
     ImageButton imgbtnOrderHistory;
     ImageButton imgbtnUser;
     ImageButton imgbtnHome;
     ImageButton imgbtnNoti;
+
+    private RecyclerView recyclerView;
+    private OrderHistoryAdapter orderHistoryAdapter;
+    private List<OrderHistoryModel> orderHistoryModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +57,19 @@ public class PurchaseHistory extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        orderHistoryModelList = new ArrayList<>();
+        orderHistoryModelList.add(new OrderHistoryModel("1928172", "140000đ", "Oct 20, 2024 08:29",
+                "3x Local Avocado, 5x Fresh Bananas..",
+                "484 Lê Văn Việt, Phường Tăng Nhơn Phú A, Quận 9, HCM"));
+
+        orderHistoryModelList.add(new OrderHistoryModel("1928173", "230000đ", "Oct 21, 2024 09:45",
+                "2x Fresh Mango, 1x Organic Orange..",
+                "100 Nguyễn Huệ, Quận 1, HCM"));
+
+        orderHistoryAdapter = new OrderHistoryAdapter(this, orderHistoryModelList);
+        recyclerView.setAdapter(orderHistoryAdapter);
     }
     private void thamchieu(){
         imgbtnOrderHistory = findViewById(R.id.imgbtnOrderHistory);
@@ -55,5 +77,6 @@ public class PurchaseHistory extends AppCompatActivity {
         imgbtnHome = findViewById(R.id.imgbtnHome);
         imgbtnNoti = findViewById(R.id.imgbtnNoti);
 
+        recyclerView = findViewById(R.id.rcvOrderHistory);
     }
 }
