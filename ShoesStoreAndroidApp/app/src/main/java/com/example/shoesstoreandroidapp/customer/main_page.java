@@ -57,8 +57,6 @@ public class main_page extends AppCompatActivity {
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Category> categoryObjects = response.body();
-
-                    // Tạo danh sách tên
                     List<String> categoryNames = new ArrayList<>();
                     for (Category c : categoryObjects) {
                         categoryNames.add(c.getName());
@@ -97,13 +95,13 @@ public class main_page extends AppCompatActivity {
                     shoesList.clear();
                     shoesList.addAll(productList);
                     shoesAdapter.notifyDataSetChanged();
+
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<List<shoesModel>>> call, Throwable t) {
                 Toast.makeText(main_page.this, "Lỗi khi gọi API: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d("API_ERROR", "Lỗi khi gọi API: " + t.getMessage());
             }
         });
 
