@@ -14,9 +14,9 @@ import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
-    private List<Notification> notificationList;
+    private List<NotificationResponse> notificationList;
 
-    public NotificationAdapter(List<Notification> list) {
+    public NotificationAdapter(List<NotificationResponse> list) {
         this.notificationList = list;
     }
 
@@ -30,10 +30,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull NotificationAdapter.ViewHolder holder, int position) {
-        Notification noti = notificationList.get(position);
+        NotificationResponse noti = notificationList.get(position);
         holder.txtTitle.setText(noti.getTitle());
         holder.txtMessage.setText(noti.getMessage());
-        holder.txtTime.setText(noti.getTimestamp());
+        holder.txtTime.setText(noti.getTimestamp()); // định dạng nếu muốn
     }
 
     @Override
@@ -52,4 +52,3 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
     }
 }
-
