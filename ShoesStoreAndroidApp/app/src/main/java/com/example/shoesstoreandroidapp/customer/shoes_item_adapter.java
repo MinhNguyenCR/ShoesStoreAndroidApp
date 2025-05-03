@@ -1,6 +1,7 @@
 package com.example.shoesstoreandroidapp.customer;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,7 @@ public class shoes_item_adapter extends RecyclerView.Adapter<shoes_item_adapter.
         shoesModel model = mList.get(position);
 
         holder.tvName.setText(model.getShoesName());
-        holder.tvPrice.setText(String.valueOf(model.getPrice()));
+        holder.tvPrice.setText("₫"+String.valueOf(model.getPrice()));
         holder.tvRating.setText(String.valueOf(model.getRating()));
 
         if (model.getImage() != null && !model.getImage().isEmpty()) {
@@ -52,6 +53,8 @@ public class shoes_item_adapter extends RecyclerView.Adapter<shoes_item_adapter.
                     .into(holder.imgvImage);
 
         }
+        Log.d("Adapter", "Shoes Name: " + model.getShoesName());
+        Log.d("Adapter", "Shoes Rating: " + model.getRating());
     }
 
 
