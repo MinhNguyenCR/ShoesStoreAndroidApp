@@ -59,6 +59,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         cartModel cartModel = mList.get(position);
         holder.tvName.setText(cartModel.getName());
+        holder.tvSize.setText(String.valueOf(cartModel.getSize()));
         holder.tvPrice.setText(String.valueOf(cartModel.getPrice()));
         Glide.with(context).load(cartModel.getImage()).into(holder.imgvImg);
     }
@@ -72,6 +73,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvName;
+        private TextView tvSize;
         private TextView tvPrice;
         private ImageView imgvImg;
         private ImageButton btnMore;
@@ -82,6 +84,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = (TextView) itemView.findViewById(R.id.productName);
+            tvSize = (TextView) itemView.findViewById(R.id.productSize);
             tvPrice = (TextView) itemView.findViewById(R.id.productPrice);
             quantity = (TextView) itemView.findViewById(R.id.productQuantity);
             imgvImg = (ImageView) itemView.findViewById(R.id.productImage);

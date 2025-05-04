@@ -17,23 +17,38 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".customer.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer.SignUpActivity"
+            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".customer.LoginActivity"-->
+<!--            android:exported="false" />-->
+        <activity
+            android:name=".customer.LoginActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".customer.PurchaseHistory"
             android:exported="false" />
-         <activity
-         android:name=".UserProfileActivity"
-         android:exported="false" />
-<!--         <activity -->
+        <activity
+            android:name=".UserProfileActivity"
+            android:exported="false" /> <!-- <activity -->
         <!-- android:name=".ProductDetailActivity" -->
         <!-- android:exported="false" /> -->
-<!--        <activity-->
-<!--            android:name=".UserProfileActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        <!-- <activity -->
+        <!-- android:name=".UserProfileActivity" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
         <activity
             android:name=".ProductDetailActivity"
             android:exported="true">

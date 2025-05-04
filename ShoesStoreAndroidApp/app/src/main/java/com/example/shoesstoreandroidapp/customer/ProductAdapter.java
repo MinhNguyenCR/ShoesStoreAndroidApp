@@ -41,7 +41,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product p = productList.get(position);
-        holder.txtProductName.setText(p.getQuantity() + "x " + p.getName());
+        holder.txtProductName.setText(p.getQuantity() + "x " + p.getName() + " (Size " + p.getSize()+")");
         holder.txtProductPrice.setText(String.format("%,dđ", p.getPrice() * p.getQuantity()));
     }
 
