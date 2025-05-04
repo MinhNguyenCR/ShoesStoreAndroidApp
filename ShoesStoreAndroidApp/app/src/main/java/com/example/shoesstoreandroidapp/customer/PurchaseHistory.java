@@ -2,8 +2,10 @@ package com.example.shoesstoreandroidapp.customer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,10 @@ import com.example.shoesstoreandroidapp.UserProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PurchaseHistory extends AppCompatActivity {
     ImageButton imgbtnOrderHistory;
@@ -58,18 +64,25 @@ public class PurchaseHistory extends AppCompatActivity {
             }
         });
 
+
+        Long userId = 6L;
+        OrderApi orderApi = RetrofitClient.getRetrofit().create(OrderApi.class);
+        OrderHistoryAdapter adapter = new OrderHistoryAdapter(this, new ArrayList<>());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        orderHistoryModelList = new ArrayList<>();
-        orderHistoryModelList.add(new OrderHistoryModel("1928172", "140000đ", "Oct 20, 2024 08:29",
-                "3x Local Avocado, 5x Fresh Bananas..",
-                "484 Lê Văn Việt, Phường Tăng Nhơn Phú A, Quận 9, HCM"));
+        recyclerView.setAdapter(adapter);
+        orderApi.getOrderHistory(userId).enqueue(new Callback<ApiResponse<List<OrderHistoryResponse>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<OrderHistoryResponse>>> call, Response<ApiResponse<List<OrderHistoryResponse>>> response) {
+                if(response.isSuccessful() && response.body() != null)
+                    adapter.setOrderList(response.body().getResult());
+            }
 
-        orderHistoryModelList.add(new OrderHistoryModel("1928173", "230000đ", "Oct 21, 2024 09:45",
-                "2x Fresh Mango, 1x Organic Orange..",
-                "100 Nguyễn Huệ, Quận 1, HCM"));
-
-        orderHistoryAdapter = new OrderHistoryAdapter(this, orderHistoryModelList);
-        recyclerView.setAdapter(orderHistoryAdapter);
+            @Override
+            public void onFailure(Call<ApiResponse<List<OrderHistoryResponse>>> call, Throwable t) {
+                Log.e("ORDER_API", "Lỗi: " + t.getMessage());
+                Toast.makeText(PurchaseHistory.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     private void thamchieu(){
         imgbtnOrderHistory = findViewById(R.id.imgbtnOrderHistory);

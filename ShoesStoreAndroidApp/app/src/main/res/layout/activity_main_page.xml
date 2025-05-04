@@ -9,13 +9,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- Thanh menu -->
-
-    <!-- Thanh tìm kiếm -->
-
-    <!-- Tabs -->
-
-    <!-- Danh sách sản phẩm -->
 
 
     <LinearLayout

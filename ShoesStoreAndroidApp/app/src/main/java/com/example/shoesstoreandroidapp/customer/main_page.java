@@ -22,7 +22,6 @@ import com.example.shoesstoreandroidapp.customer.Model.ProductModel;
 import com.example.shoesstoreandroidapp.customer.Response.ProductResponse;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -35,6 +34,10 @@ public class main_page extends AppCompatActivity {
     private ListProductAdapter listProductAdapter;
     private List<ProductModel> listProduct;
     private List<shoesModel> shoesList;
+
+    private RecyclerView categoryRecyclerView;
+    private categoryAdapter categoryAdapter;
+
     private ImageButton toCart;
     private ImageButton homeActive;
     private ImageButton imgbtnNoti;
@@ -42,7 +45,9 @@ public class main_page extends AppCompatActivity {
     private ImageButton imgbtnUser;
     private ImageButton imgbtnOrderHistory;
 
+
     ProductAPI productAPI;
+
 
 
     @Override
@@ -51,12 +56,35 @@ public class main_page extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main_page);
         thamChieu();
-        RecyclerView categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
-        List<String> categories = Arrays.asList("All", "Nike", "Adidas", "New Balance", "Puma", "Reebok");
 
-        categoryAdapter adapter = new categoryAdapter(this, categories);
+        // 🟦 Setup RecyclerView cho danh mục
+        categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        categoryRecyclerView.setAdapter(adapter);
+
+        // 🟦 Gọi API danh mục
+        CategoryApi categoryApi = RetrofitClient.getRetrofit().create(CategoryApi.class);
+        categoryApi.getCategories().enqueue(new Callback<List<Category>>() {
+            @Override
+            public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Category> categoryObjects = response.body();
+                    List<String> categoryNames = new ArrayList<>();
+                    for (Category c : categoryObjects) {
+                        categoryNames.add(c.getName());
+                    }
+
+                    categoryAdapter = new categoryAdapter(main_page.this, categoryNames);
+                    categoryRecyclerView.setAdapter(categoryAdapter);
+                } else {
+                    Log.e("API_ERROR", "Phản hồi không thành công");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Category>> call, Throwable t) {
+                Log.e("API_ERROR", "Lỗi gọi API Category: " + t.getMessage());
+            }
+        });
 
         homeActive.setImageResource(R.drawable.home_icon_active);
 
@@ -88,41 +116,36 @@ public class main_page extends AppCompatActivity {
         recyclerView.setAdapter(listProductAdapter);
 
 
-        toCart.setOnClickListener(new View.OnClickListener() {
+        // 🟦 Gọi API sản phẩm
+        ProductApi apiService = RetrofitClient.getRetrofit().create(ProductApi.class);
+        apiService.getProducts().enqueue(new Callback<ApiResponse<List<shoesModel>>>() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(main_page.this, cart_page.class);
-                startActivity(intent);
+            public void onResponse(Call<ApiResponse<List<shoesModel>>> call, Response<ApiResponse<List<shoesModel>>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<shoesModel> productList = response.body().getResult();
+                    shoesList.clear();
+                    shoesList.addAll(productList);
+                    shoesAdapter.notifyDataSetChanged();
+
+                }
             }
-        });
-        imgbtnNoti.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(main_page.this, notificationActivity.class);
-                startActivity(intent);
-            }
-        });
-        imgbtnUser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(main_page.this, UserProfileActivity.class);
-                startActivity(intent);
-            }
-        });
-        imgbtnOrderHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(main_page.this, PurchaseHistory.class);
-                startActivity(intent);
+            public void onFailure(Call<ApiResponse<List<shoesModel>>> call, Throwable t) {
+                Toast.makeText(main_page.this, "Lỗi khi gọi API: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
+        // 🟦 Click sự kiện
+        toCart.setOnClickListener(v -> startActivity(new Intent(main_page.this, cart_page.class)));
+        imgbtnNoti.setOnClickListener(v -> startActivity(new Intent(main_page.this, notificationActivity.class)));
+        imgbtnUser.setOnClickListener(v -> startActivity(new Intent(main_page.this, UserProfileActivity.class)));
+        imgbtnOrderHistory.setOnClickListener(v -> startActivity(new Intent(main_page.this, PurchaseHistory.class)));
 
-        //search view
+        // 🟦 Search
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Handle search query submission (optional)
                 return false;
             }
 
@@ -133,15 +156,6 @@ public class main_page extends AppCompatActivity {
             }
         });
     }
-//    private void filterShoes(String query) {
-//        List<shoesModel> filteredList = new ArrayList<>();
-//        for (shoesModel item : shoesList) {
-//            if (item.getShoesName().toLowerCase().contains(query.toLowerCase())) {
-//                filteredList.add(item);
-//            }
-//        }
-//        shoesAdapter.updateList(filteredList);
-//    }
 
     private void filterShoes(String query) {
         List<ProductModel> filteredList = new ArrayList<>();
@@ -152,8 +166,8 @@ public class main_page extends AppCompatActivity {
         }
         listProductAdapter.updateList(filteredList);
     }
-    public void thamChieu(){
 
+    private void thamChieu() {
         toCart = findViewById(R.id.CartBtn);
         homeActive = findViewById(R.id.imgbtnHome);
         imgbtnNoti = findViewById(R.id.imgbtnNoti);
@@ -163,4 +177,6 @@ public class main_page extends AppCompatActivity {
     }
 
 
+
 }
+

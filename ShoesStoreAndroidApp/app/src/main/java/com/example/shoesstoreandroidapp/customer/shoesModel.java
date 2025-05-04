@@ -1,47 +1,28 @@
 package com.example.shoesstoreandroidapp.customer;
 
+
 public class shoesModel {
-    private String shoesName;
+    private String name;
     private double price;
-    private double rating;
-    private int image;
+    private double feedbackStar;
+    private String image;
 
-    public shoesModel(String shoesName, double price, double rating, int image) {
-        this.shoesName = shoesName;
+    public shoesModel(String name, double price, double feedbackStar, String image) {
+        this.name = name;
         this.price = price;
-        this.rating = rating;
+        this.feedbackStar = feedbackStar;
         this.image = image;
     }
 
-    public String getShoesName() {
-        return shoesName;
-    }
+    public String getShoesName() { return name; }
+    public void setShoesName(String shoesName) { this.name = shoesName; }
 
-    public void setShoesName(String shoesName) {
-        this.shoesName = shoesName;
-    }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 
-    public double getPrice() {
-        return price;
-    }
+    public double getRating() { return feedbackStar; }
+    public void setRating(double rating) { this.feedbackStar = rating; }
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
-
-    public int getImage() {
-        return image;
-    }
-
-    public void setImage(int image) {
-        this.image = image;
-    }
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
 }

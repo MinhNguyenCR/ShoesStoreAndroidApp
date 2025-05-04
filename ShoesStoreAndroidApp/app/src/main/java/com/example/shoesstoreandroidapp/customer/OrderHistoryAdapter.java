@@ -17,9 +17,25 @@ import java.util.List;
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.OrderViewHolder> {
 
     private Context context;
-    private List<OrderHistoryModel> orderList;
+    private List<OrderHistoryResponse> orderList;
 
-    public OrderHistoryAdapter(Context context, List<OrderHistoryModel> orderList) {
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public List<OrderHistoryResponse> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<OrderHistoryResponse> orderList) {
+        this.orderList = orderList;
+    }
+
+    public OrderHistoryAdapter(Context context, List<OrderHistoryResponse> orderList) {
         this.context = context;
         this.orderList = orderList;
     }
@@ -33,12 +49,13 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
 
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
-        OrderHistoryModel order = orderList.get(position);
-        holder.tvOrderId.setText(order.getOrderId());
-        holder.tvOrderPrice.setText(order.getPrice());
-        holder.tvOrderDate.setText(order.getDate());
-        holder.tvOrderDescription.setText(order.getDescription());
-        holder.tvOrderAddress.setText(order.getAddress());
+        OrderHistoryResponse order = orderList.get(position);
+        holder.tvOrderId.setText(order.getOrderId().toString());
+        holder.tvOrderPrice.setText(order.getOrderTotal().toString());
+        holder.tvOrderDate.setText(order.getOrderDate());
+        holder.tvOrderDescription.setText(order.getQuantity()+"x"+order.getProductName());
+        holder.tvOrderAddress.setText(order.getCommune()+","+order.getDetailedAddress()+","+
+                order.getDistrict()+","+order.getProvince());
     }
 
     @Override

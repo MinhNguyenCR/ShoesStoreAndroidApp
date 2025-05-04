@@ -1,6 +1,7 @@
 package com.example.shoesstoreandroidapp.customer;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,13 +41,22 @@ public class shoes_item_adapter extends RecyclerView.Adapter<shoes_item_adapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        shoesModel shoesModel = mList.get(position);
-        holder.tvName.setText(shoesModel.getShoesName());
-        holder.tvPrice.setText(String.valueOf(shoesModel.getPrice()));
-        holder.tvRating.setText(String.valueOf(shoesModel.getRating()));
-        Glide.with(context).load(shoesModel.getImage()).into(holder.imgvImage);
+        shoesModel model = mList.get(position);
 
+        holder.tvName.setText(model.getShoesName());
+        holder.tvPrice.setText("₫"+String.valueOf(model.getPrice()));
+        holder.tvRating.setText(String.valueOf(model.getRating()));
+
+        if (model.getImage() != null && !model.getImage().isEmpty()) {
+            Glide.with(context)
+                    .load(model.getImage())
+                    .into(holder.imgvImage);
+
+        }
+        Log.d("Adapter", "Shoes Name: " + model.getShoesName());
+        Log.d("Adapter", "Shoes Rating: " + model.getRating());
     }
+
 
     @Override
     public int getItemCount() {
