@@ -42,6 +42,7 @@ public class checkout_page extends AppCompatActivity {
         for (CartItem cartItem : receivedItems) {
             productList.add(new Product(
                     cartItem.getProduct().getName(),
+                    cartItem.getProduct().getSize(),
                     cartItem.getQuantity(),
                     (int) cartItem.getProduct().getPrice()
             ));

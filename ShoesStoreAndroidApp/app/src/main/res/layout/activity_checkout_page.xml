@@ -20,13 +20,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <EditText
-            android:hint="Email"
-            android:text="minh.dox.555@gmail.com"
-            android:inputType="textEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp" />
+<!--        <EditText-->
+<!--            android:hint="Email"-->
+<!--            android:text="minh.dox.555@gmail.com"-->
+<!--            android:inputType="textEmailAddress"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="12dp" />-->
 
         <EditText
             android:hint="Họ tên"

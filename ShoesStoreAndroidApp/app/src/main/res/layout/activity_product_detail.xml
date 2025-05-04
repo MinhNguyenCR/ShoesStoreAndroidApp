@@ -63,7 +63,7 @@
                         android:src="@drawable/shoe_image" />
 
                     <TextView
-                        android:id="@+id/txtTitle"
+                        android:id="@+id/txtProductName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -81,48 +81,15 @@
                         android:progressTint="@android:color/holo_orange_light"
                         android:rating="4.0" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:orientation="horizontal">
 
-                        <Button
-                            android:id="@+id/btnSize39"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="@drawable/button_size_selector"
-                            android:text="39"
-                            android:textSize="14sp"
-                            android:gravity="center"
-                            android:padding="4dp"
-                            android:textColor="@android:color/black" />
 
-                        <Button
-                            android:id="@+id/btnSize40"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="@drawable/button_size_selector"
-                            android:text="40"
-                            android:textSize="14sp"
-                            android:gravity="center"
-                            android:padding="4dp"
-                            android:textColor="@android:color/black" />
-
-                        <Button
-                            android:id="@+id/btnSize41"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="@drawable/button_size_selector"
-                            android:text="41"
-                            android:textSize="14sp"
-                            android:gravity="center"
-                            android:padding="4dp"
-                            android:textColor="@android:color/black" />
-                    </LinearLayout>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/sizeRecyclerView"
+                        android:layout_width="376dp"
+                        android:layout_height="47dp"
+                        android:orientation="horizontal"
+                        android:overScrollMode="never"
+                        android:layout_marginTop="8dp"/>
 
                     <TextView
                         android:id="@+id/txtDescription"

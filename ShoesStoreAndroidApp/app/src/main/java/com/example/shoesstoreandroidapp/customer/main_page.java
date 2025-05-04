@@ -16,6 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoesstoreandroidapp.R;
 import com.example.shoesstoreandroidapp.UserProfileActivity;
+import com.example.shoesstoreandroidapp.customer.API.ProductAPI;
+import com.example.shoesstoreandroidapp.customer.Adapter.ListProductAdapter;
+import com.example.shoesstoreandroidapp.customer.Model.ProductModel;
+import com.example.shoesstoreandroidapp.customer.Response.ProductResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,8 @@ import retrofit2.Response;
 public class main_page extends AppCompatActivity {
     private RecyclerView recyclerView;
     private shoes_item_adapter shoesAdapter;
+    private ListProductAdapter listProductAdapter;
+    private List<ProductModel> listProduct;
     private List<shoesModel> shoesList;
 
     private RecyclerView categoryRecyclerView;
@@ -38,6 +44,11 @@ public class main_page extends AppCompatActivity {
     private SearchView searchView;
     private ImageButton imgbtnUser;
     private ImageButton imgbtnOrderHistory;
+
+
+    ProductAPI productAPI;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +88,33 @@ public class main_page extends AppCompatActivity {
 
         homeActive.setImageResource(R.drawable.home_icon_active);
 
-        // 🟦 Setup RecyclerView cho sản phẩm
+
+        // Hiên thị danh sách các sản phẩm//shoes items
         recyclerView = findViewById(R.id.shoes_item_recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        listProduct = new ArrayList<>();
 
-        shoesList = new ArrayList<>();
-        shoesAdapter = new shoes_item_adapter(this, shoesList);
-        recyclerView.setAdapter(shoesAdapter);
+        productAPI = RetrofitClient.getRetrofit().create(ProductAPI.class);
+        productAPI.getProducts().enqueue(new Callback<ProductResponse>() {
+                @Override
+                public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        listProduct.clear();
+                        listProduct.addAll(response.body().getResult());
+                        listProductAdapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProductResponse> call, Throwable t) {
+                    Toast.makeText(main_page.this, "Load failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
+        listProductAdapter = new ListProductAdapter(this, listProduct);
+        recyclerView.setAdapter(listProductAdapter);
+
 
         // 🟦 Gọi API sản phẩm
         ProductApi apiService = RetrofitClient.getRetrofit().create(ProductApi.class);
@@ -127,13 +158,13 @@ public class main_page extends AppCompatActivity {
     }
 
     private void filterShoes(String query) {
-        List<shoesModel> filteredList = new ArrayList<>();
-        for (shoesModel item : shoesList) {
-            if (item.getShoesName().toLowerCase().contains(query.toLowerCase())) {
+        List<ProductModel> filteredList = new ArrayList<>();
+        for (ProductModel item : listProduct) {
+            if (item.getName().toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(item);
             }
         }
-        shoesAdapter.updateList(filteredList);
+        listProductAdapter.updateList(filteredList);
     }
 
     private void thamChieu() {
@@ -144,4 +175,8 @@ public class main_page extends AppCompatActivity {
         imgbtnUser = findViewById(R.id.imgbtnUser);
         imgbtnOrderHistory = findViewById(R.id.imgbtnOrderHistory);
     }
+
+
+
 }
+

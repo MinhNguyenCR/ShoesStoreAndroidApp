@@ -33,12 +33,12 @@ public class cart_page extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         cartList = new ArrayList<>();
         // Thêm dữ liệu mẫu vào giỏ hàng
-        cartList.add(new cartModel("Nike Air Max", 12000.0, R.drawable.img_2));
-        cartList.add(new cartModel("Adidas Ultraboost", 15000.0, R.drawable.img_3));
-        cartList.add(new cartModel("Puma RS-X", 9000.0, R.drawable.img_1));
-        cartList.add(new cartModel("Nike Air Max", 12000.0, R.drawable.img_2));
-        cartList.add(new cartModel("Adidas Ultraboost", 150.0, R.drawable.img_3));
-        cartList.add(new cartModel("Puma RS-X", 90.0, R.drawable.img_1));
+        cartList.add(new cartModel("Nike Air Max", 40, 12000.0, R.drawable.img_2));
+        cartList.add(new cartModel("Adidas Ultraboost", 38, 15000.0, R.drawable.img_3));
+        cartList.add(new cartModel("Puma RS-X", 41, 9000.0, R.drawable.img_1));
+        cartList.add(new cartModel("Nike Air Max", 42,12000.0, R.drawable.img_2));
+        cartList.add(new cartModel("Adidas Ultraboost", 39,150.0, R.drawable.img_3));
+        cartList.add(new cartModel("Puma RS-X", 40,90.0, R.drawable.img_1));
 
 
         totalMoney = findViewById(R.id.totalMoney);
