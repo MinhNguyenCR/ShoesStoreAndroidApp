@@ -9,7 +9,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 
 public interface ProductAPI {
-    @GET("shoestore/product/all") // Đường dẫn đúng theo backend
+    @GET("shoestore/product/all")
     Call<ProductResponse> getProducts();
 
     @GET("shoestore/product/{name}")
