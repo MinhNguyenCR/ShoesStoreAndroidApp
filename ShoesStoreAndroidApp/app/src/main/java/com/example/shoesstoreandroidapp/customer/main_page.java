@@ -34,18 +34,14 @@ public class main_page extends AppCompatActivity {
     private ListProductAdapter listProductAdapter;
     private List<ProductModel> listProduct;
     private List<shoesModel> shoesList;
-
     private RecyclerView categoryRecyclerView;
     private categoryAdapter categoryAdapter;
-
     private ImageButton toCart;
     private ImageButton homeActive;
     private ImageButton imgbtnNoti;
     private SearchView searchView;
     private ImageButton imgbtnUser;
     private ImageButton imgbtnOrderHistory;
-
-
     ProductAPI productAPI;
 
 
@@ -57,11 +53,11 @@ public class main_page extends AppCompatActivity {
         setContentView(R.layout.activity_main_page);
         thamChieu();
 
-        // 🟦 Setup RecyclerView cho danh mục
+        // Setup RecyclerView cho danh mục
         categoryRecyclerView = findViewById(R.id.categoryRecyclerView);
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // 🟦 Gọi API danh mục
+        // Gọi API danh mục
         CategoryAPI categoryApi = RetrofitClient.getRetrofit().create(CategoryAPI.class);
         categoryApi.getCategories().enqueue(new Callback<List<Category>>() {
             @Override
@@ -69,11 +65,24 @@ public class main_page extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<Category> categoryObjects = response.body();
                     List<String> categoryNames = new ArrayList<>();
+                    // Thêm nút All đầu tiên để hiển thị tất cả các san phẩm
+                    categoryNames.add("All");
                     for (Category c : categoryObjects) {
                         categoryNames.add(c.getName());
                     }
+                    // Tạo adapter có listener khi click
+                    categoryAdapter = new categoryAdapter(main_page.this, categoryNames, new OnCategoryClickListener() {
+                        @Override
+                        public void onCategoryClick(String category) {
+                            // Không gọi lại API, dùng danh sách đã có
+                            if (category.equals("All")) {
+                                listProductAdapter.updateList(listProduct);
+                            } else {
+                                fetchProductsByCategory(category);
+                            }
+                        }
+                    });
 
-                    categoryAdapter = new categoryAdapter(main_page.this, categoryNames);
                     categoryRecyclerView.setAdapter(categoryAdapter);
                 } else {
                     Log.e("API_ERROR", "Phản hồi không thành công");
@@ -86,8 +95,8 @@ public class main_page extends AppCompatActivity {
             }
         });
 
-        homeActive.setImageResource(R.drawable.home_icon_active);
 
+        homeActive.setImageResource(R.drawable.home_icon_active);
 
         // Hiên thị danh sách các sản phẩm
         recyclerView = findViewById(R.id.shoes_item_recyclerView);
@@ -116,13 +125,13 @@ public class main_page extends AppCompatActivity {
         recyclerView.setAdapter(listProductAdapter);
 
 
-        // 🟦 Click sự kiện
+        // Click sự kiện
         toCart.setOnClickListener(v -> startActivity(new Intent(main_page.this, cart_page.class)));
         imgbtnNoti.setOnClickListener(v -> startActivity(new Intent(main_page.this, notificationActivity.class)));
         imgbtnUser.setOnClickListener(v -> startActivity(new Intent(main_page.this, UserProfileActivity.class)));
         imgbtnOrderHistory.setOnClickListener(v -> startActivity(new Intent(main_page.this, PurchaseHistory.class)));
 
-        // 🟦 Search
+        // Search
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -147,6 +156,28 @@ public class main_page extends AppCompatActivity {
         listProductAdapter.updateList(filteredList);
     }
 
+    // Gọi API lọc sản phẩm theo category
+    private void fetchProductsByCategory(String category) {
+        ProductAPI productAPI = RetrofitClient.getRetrofit().create(ProductAPI.class);
+        Call<ProductResponse> call = productAPI.getProductsByCategoryName(category);
+        call.enqueue(new Callback<ProductResponse>() {
+            @Override
+            public void onResponse(Call<ProductResponse> call, Response<ProductResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<ProductModel> productList = response.body().getResult();
+                    // Cập nhật lại sản phẩm trên UI
+                    listProductAdapter.updateList(productList);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductResponse> call, Throwable t) {
+                Toast.makeText(main_page.this, "Lỗi khi tải sản phẩm", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     private void thamChieu() {
         toCart = findViewById(R.id.CartBtn);
         homeActive = findViewById(R.id.imgbtnHome);
@@ -155,8 +186,6 @@ public class main_page extends AppCompatActivity {
         imgbtnUser = findViewById(R.id.imgbtnUser);
         imgbtnOrderHistory = findViewById(R.id.imgbtnOrderHistory);
     }
-
-
 
 }
 

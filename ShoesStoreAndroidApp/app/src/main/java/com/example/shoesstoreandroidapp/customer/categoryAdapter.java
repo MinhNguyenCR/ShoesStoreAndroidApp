@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.shoesstoreandroidapp.customer.OnCategoryClickListener;
+
 
 import com.example.shoesstoreandroidapp.R;
 
@@ -19,11 +21,19 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.ViewHo
     private List<String> categories;
     private Context context;
     private int selectedPosition = 0; // Chỉ số của nút được chọn
+    private OnCategoryClickListener listener;
 
     public categoryAdapter(Context context, List<String> categories) {
         this.context = context;
         this.categories = categories;
     }
+
+    public categoryAdapter(Context context, List<String> categories, OnCategoryClickListener listener) {
+        this.context = context;
+        this.categories = categories;
+        this.listener = listener;
+    }
+
 
     @NonNull
     @Override
@@ -48,10 +58,13 @@ public class categoryAdapter extends RecyclerView.Adapter<categoryAdapter.ViewHo
             holder.categoryTextView.setTextColor(Color.BLACK);
         }
 
-        // Xử lý sự kiện click
+        // Xử lý sự kiện click vào category
         holder.categoryTextView.setOnClickListener(v -> {
             selectedPosition = adapterPosition;
-            notifyDataSetChanged(); // Cập nhật UI
+            notifyDataSetChanged();
+            if (listener != null) {
+                listener.onCategoryClick(categories.get(adapterPosition));
+            }
         });
     }
 

@@ -15,4 +15,7 @@ public interface ProductAPI {
     @GET("shoestore/product/{name}")
     Call<ProductDetailResponse> getProductByName(@Path("name") String name);
 
+    @GET("shoestore/product/category/{categoryName}")
+    Call<ProductResponse> getProductsByCategoryName(@Path("categoryName") String name);
+
 }
