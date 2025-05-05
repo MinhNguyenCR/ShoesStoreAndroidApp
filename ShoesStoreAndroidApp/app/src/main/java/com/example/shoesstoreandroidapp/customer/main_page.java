@@ -3,7 +3,6 @@ package com.example.shoesstoreandroidapp.customer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoesstoreandroidapp.R;
 import com.example.shoesstoreandroidapp.UserProfileActivity;
+import com.example.shoesstoreandroidapp.customer.API.CategoryAPI;
 import com.example.shoesstoreandroidapp.customer.API.ProductAPI;
 import com.example.shoesstoreandroidapp.customer.Adapter.ListProductAdapter;
 import com.example.shoesstoreandroidapp.customer.Model.ProductModel;
@@ -62,7 +62,7 @@ public class main_page extends AppCompatActivity {
         categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // 🟦 Gọi API danh mục
-        CategoryApi categoryApi = RetrofitClient.getRetrofit().create(CategoryApi.class);
+        CategoryAPI categoryApi = RetrofitClient.getRetrofit().create(CategoryAPI.class);
         categoryApi.getCategories().enqueue(new Callback<List<Category>>() {
             @Override
             public void onResponse(Call<List<Category>> call, Response<List<Category>> response) {
@@ -89,7 +89,7 @@ public class main_page extends AppCompatActivity {
         homeActive.setImageResource(R.drawable.home_icon_active);
 
 
-        // Hiên thị danh sách các sản phẩm//shoes items
+        // Hiên thị danh sách các sản phẩm
         recyclerView = findViewById(R.id.shoes_item_recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         listProduct = new ArrayList<>();
@@ -115,26 +115,6 @@ public class main_page extends AppCompatActivity {
         listProductAdapter = new ListProductAdapter(this, listProduct);
         recyclerView.setAdapter(listProductAdapter);
 
-
-        // 🟦 Gọi API sản phẩm
-        ProductApi apiService = RetrofitClient.getRetrofit().create(ProductApi.class);
-        apiService.getProducts().enqueue(new Callback<ApiResponse<List<shoesModel>>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<List<shoesModel>>> call, Response<ApiResponse<List<shoesModel>>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<shoesModel> productList = response.body().getResult();
-                    shoesList.clear();
-                    shoesList.addAll(productList);
-                    shoesAdapter.notifyDataSetChanged();
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ApiResponse<List<shoesModel>>> call, Throwable t) {
-                Toast.makeText(main_page.this, "Lỗi khi gọi API: " + t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
 
         // 🟦 Click sự kiện
         toCart.setOnClickListener(v -> startActivity(new Intent(main_page.this, cart_page.class)));

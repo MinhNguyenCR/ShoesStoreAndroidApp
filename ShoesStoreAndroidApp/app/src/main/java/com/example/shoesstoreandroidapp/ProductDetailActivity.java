@@ -16,8 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.shoesstoreandroidapp.customer.API.FeedbackAPI;
 import com.example.shoesstoreandroidapp.customer.API.ProductAPI;
+import com.example.shoesstoreandroidapp.customer.Model.FeedbackModel;
 import com.example.shoesstoreandroidapp.customer.Model.ProductDetailModel;
+import com.example.shoesstoreandroidapp.customer.Response.FeedbackResponse;
 import com.example.shoesstoreandroidapp.customer.Response.ProductDetailResponse;
 import com.example.shoesstoreandroidapp.customer.RetrofitClient;
 import com.example.shoesstoreandroidapp.customer.categoryAdapter;
@@ -38,6 +41,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private RecyclerView sizeRecyclerView;
     private ReviewAdapter reviewAdapter;
     private List<ReviewModal> reviewList;
+    private List<FeedbackModel> feedbackModelList;
     private ImageView imageView;
     private TextView nameTextView, priceTextView, descTextView;
     private RatingBar ratingBar;
@@ -58,10 +62,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         descTextView = findViewById(R.id.txtDescription);
         ratingBar = findViewById(R.id.ratingBar);
         sizeRecyclerView = (RecyclerView)findViewById(R.id.sizeRecyclerView);
+        reviewRecyclerView = (RecyclerView)findViewById(R.id.rc_reviews);
 
 
+        // Lấy productName truyền từ ListProductAdapter
         String productName = getIntent().getStringExtra("productName");
         Log.d("ProductName", "Name: " + productName);
+
+        // Gọi API hiển thị chi tiết sản phẩm
         productAPI = RetrofitClient.getRetrofit().create(ProductAPI.class);
         productAPI.getProductByName(productName).enqueue(new Callback<ProductDetailResponse>() {
             @Override
@@ -102,25 +110,61 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
 
-        reviewRecyclerView = (RecyclerView)findViewById(R.id.rc_reviews);
-//        recyclerReviews.setLayoutManager(new LinearLayoutManager(this));
-
-        reviewList = new ArrayList<>();
-        reviewList.add(new ReviewModal("John Doe", 4.5f, "Great quality! Very comfortable to wear."));
-        reviewList.add(new ReviewModal("Alice Smith", 5.0f, "Absolutely love it! Highly recommend."));
-        reviewList.add(new ReviewModal("Michael Lee", 3.5f, "Good shoes but a bit expensive."));
-        reviewList.add(new ReviewModal("Emma Wilson", 4.0f, "Nice design, fits well."));
-        reviewList.add(new ReviewModal("John Doe", 4.5f, "Great quality! Very comfortable to wear."));
-        reviewList.add(new ReviewModal("Alice Smith", 5.0f, "Absolutely love it! Highly recommend."));
-        reviewList.add(new ReviewModal("Michael Lee", 3.5f, "Good shoes but a bit expensive."));
-        reviewList.add(new ReviewModal("Emma Wilson", 4.0f, "Nice design, fits well."));
-
-
-
-        reviewAdapter = new ReviewAdapter(this, reviewList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        reviewRecyclerView.setLayoutManager(linearLayoutManager);
-        reviewRecyclerView.setAdapter(reviewAdapter);
+        //Gọi API hiển thị đánh giá
+        loadFeedbacks(productName);
 
     }
+
+    private void loadFeedbacks(String productName) {
+        FeedbackAPI feedbackAPI = RetrofitClient.getRetrofit().create(FeedbackAPI.class);
+
+        feedbackAPI.getFeedbacksByProduct(productName).enqueue(new Callback<FeedbackResponse>() {
+            @Override
+            public void onResponse(Call<FeedbackResponse> call, Response<FeedbackResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    FeedbackResponse feedbackResponse = response.body();
+
+                    if (feedbackResponse.getCode() == 1000) {
+                        List<FeedbackModel> feedbackList = feedbackResponse.getResult();
+
+                        // Log feedbacks
+                        for (int i = 0; i < feedbackList.size(); i++) {
+                            FeedbackModel fb = feedbackList.get(i);
+                            Log.d("Feedback", "User: " + fb.getUser_name()
+                                    + ", Rate: " + fb.getRate()
+                                    + ", Comment: " + fb.getComment());
+                        }
+
+                         //Convert FeedbackModel -> ReviewModal
+                        List<ReviewModal> reviewList = new ArrayList<>();
+                        for (FeedbackModel fb : feedbackList) {
+                            reviewList.add(new ReviewModal(
+                                    fb.getUser_name(),
+                                    fb.getRate().floatValue(),
+                                    fb.getComment()
+                            ));
+                        }
+
+                        // Hiển thị lên RecyclerView
+                        reviewAdapter = new ReviewAdapter(ProductDetailActivity.this, reviewList);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ProductDetailActivity.this, LinearLayoutManager.VERTICAL, false);
+                        reviewRecyclerView.setLayoutManager(linearLayoutManager);
+                        reviewRecyclerView.setAdapter(reviewAdapter);
+                    } else {
+                        Toast.makeText(ProductDetailActivity.this, "No feedback found", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(ProductDetailActivity.this, "Failed to load feedback", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<FeedbackResponse> call, Throwable t) {
+                Toast.makeText(ProductDetailActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e("API_ERROR", t.getMessage(), t);
+            }
+        });
+    }
+
+
 }
