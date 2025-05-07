@@ -16,13 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.shoesstoreandroidapp.R;
+import com.example.shoesstoreandroidapp.customer.Model.CartItemModel;
 
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     private Context context;
-    private List<cartModel> mList;
+    private List<CartItemModel> mList;
     private OnQuantityChangeListener quantityChangeListener;
     private OnItemDeleteListener itemDeleteListener;
 
@@ -43,7 +44,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         this.quantityChangeListener = listener;
     }
 
-    public CartAdapter(Context context, List<cartModel> mList) {
+    public CartAdapter(Context context, List<CartItemModel> mList) {
         this.context = context;
         this.mList = mList;
     }
@@ -57,10 +58,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        cartModel cartModel = mList.get(position);
-        holder.tvName.setText(cartModel.getName());
+        CartItemModel cartModel = mList.get(position);
+        holder.tvName.setText(cartModel.getProductName());
         holder.tvSize.setText(String.valueOf(cartModel.getSize()));
-        holder.tvPrice.setText(String.valueOf(cartModel.getPrice()));
+        holder.tvPrice.setText(String.valueOf(cartModel.getTotal_price()));
+        holder.quantity.setText(String.valueOf(cartModel.getQuantity()));
         Glide.with(context).load(cartModel.getImage()).into(holder.imgvImg);
     }
 
@@ -98,6 +100,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     String quantityStr = quantity.getText().toString();
                     int CurrentQuantity = Integer.parseInt(quantityStr);
                     CurrentQuantity++;
+
+                    mList.get(getAdapterPosition()).setQuantity(CurrentQuantity);
+
                     quantity.setText(String.valueOf(CurrentQuantity));
                     if (quantityChangeListener != null) {
                         quantityChangeListener.onQuantityChanged();
@@ -111,6 +116,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                     int CurrentQuantity = Integer.parseInt(quantityStr);
                     if (CurrentQuantity > 1) {
                         CurrentQuantity--;
+
+                        mList.get(getAdapterPosition()).setQuantity(CurrentQuantity);
+
                         quantity.setText(String.valueOf(CurrentQuantity));
                         if (quantityChangeListener != null) {
                             quantityChangeListener.onQuantityChanged();

@@ -41,10 +41,10 @@ public class checkout_page extends AppCompatActivity {
         List<Product> productList = new ArrayList<>();
         for (CartItem cartItem : receivedItems) {
             productList.add(new Product(
-                    cartItem.getProduct().getName(),
+                    cartItem.getProduct().getProductName(),
                     cartItem.getProduct().getSize(),
                     cartItem.getQuantity(),
-                    (int) cartItem.getProduct().getPrice()
+                    (int) cartItem.getProduct().getTotal_price()
             ));
         }
         totalMoney = findViewById(R.id.totalMoney);

@@ -9,6 +9,24 @@ public class cartModel implements Serializable {
     private double price;
     private int image;
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    private int quantity;
+
+    public cartModel(String name, Integer size, double price, int image, int quantity) {
+        this.name = name;
+        this.size = size;
+        this.price = price;
+        this.image = image;
+        this.quantity = quantity;
+    }
+
     public cartModel(String name, Integer size, double price, int image) {
         this.name = name;
         this.size = size;
