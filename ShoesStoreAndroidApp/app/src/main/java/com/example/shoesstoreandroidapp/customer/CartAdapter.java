@@ -1,6 +1,8 @@
 package com.example.shoesstoreandroidapp.customer;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +18,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.shoesstoreandroidapp.R;
+import com.example.shoesstoreandroidapp.customer.API.CartAPI;
 import com.example.shoesstoreandroidapp.customer.Model.CartItemModel;
+import com.example.shoesstoreandroidapp.customer.Response.BooleanResponse;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
@@ -26,6 +34,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private List<CartItemModel> mList;
     private OnQuantityChangeListener quantityChangeListener;
     private OnItemDeleteListener itemDeleteListener;
+    private CartAPI cartAPI;
 
     public void setOnDeletedChangeListener(OnItemDeleteListener itemDeleteListener) {
         this.itemDeleteListener = itemDeleteListener;
@@ -131,11 +140,43 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(itemDeleteListener != null){
-                        itemDeleteListener.onItemDeleted(getAdapterPosition());
-                    }
+                    new AlertDialog.Builder(v.getContext())
+                            .setTitle("Xác nhận xóa")
+                            .setMessage("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    int position = getAdapterPosition();
+                                    CartItemModel item = mList.get(position);
+                                    Long cartItemId = item.getId();
+
+                                    cartAPI = RetrofitClient.getRetrofit().create(CartAPI.class);
+                                    cartAPI.deleteCartItemFromCart(cartItemId).enqueue(new Callback<BooleanResponse>() {
+                                        @Override
+                                        public void onResponse(Call<BooleanResponse> call, Response<BooleanResponse> response) {
+                                            if (response.isSuccessful() && response.body() != null && response.body().getCode() == 1000) {
+                                                Toast.makeText(v.getContext(), "Đã xóa sản phẩm", Toast.LENGTH_SHORT).show();
+                                                if (itemDeleteListener != null) {
+                                                    // xóa giỏ hàng ra khỏi giao diện
+                                                    itemDeleteListener.onItemDeleted(position);
+                                                }
+                                            } else {
+                                                Toast.makeText(v.getContext(), "Xóa thất bại", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<BooleanResponse> call, Throwable t) {
+                                            Toast.makeText(v.getContext(), "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .show();
                 }
             });
+
+
         }
     }
 }

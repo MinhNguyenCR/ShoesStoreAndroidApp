@@ -16,7 +16,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.shoesstoreandroidapp.R;
 import com.example.shoesstoreandroidapp.customer.API.CartAPI;
 import com.example.shoesstoreandroidapp.customer.Model.CartItemModel;
+import com.example.shoesstoreandroidapp.customer.Request.CartItemUpdateRequest;
+import com.example.shoesstoreandroidapp.customer.Response.BooleanResponse;
 import com.example.shoesstoreandroidapp.customer.Response.CartItemsResponse;
+import com.example.shoesstoreandroidapp.customer.Response.ErrorResponse;
+import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -62,8 +66,6 @@ public class cart_page extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     cartItemModelList.clear();
                     cartItemModelList.addAll(response.body().getResult());
-
-                    // Gán adapter sau khi có dữ liệu
                     cartAdapter = new CartAdapter(cart_page.this, cartItemModelList);
 
                     // Xử lý khi số lượng thay đổi
@@ -89,25 +91,23 @@ public class cart_page extends AppCompatActivity {
             }
         });
 
-
-
         // Xử lý nút thanh toán
         goToCheckOut.setOnClickListener(v -> {
+            // Cập nhật lại quantity của mỗi CartItem
+            updateCartToServer();
+            // Thành công, chuyển sang trang thanh toán
             ArrayList<CartItem> itemsToSend = new ArrayList<>();
             for (CartItemModel item : cartItemModelList) {
-                int quantity = item.getQuantity();  // Dùng quantity từ model
+                int quantity = item.getQuantity();
+                Long id = item.getId();
                 itemsToSend.add(new CartItem(item, quantity));
             }
-
-           // double total = Double.parseDouble(totalMoney.getText().toString());
-
             Intent intent = new Intent(cart_page.this, checkout_page.class);
             intent.putExtra("cartItems", itemsToSend);
             intent.putExtra("totalMoney", totalAmountValue);
             startActivity(intent);
         });
     }
-
 
     public void CalcTotalMoney() {
         double total = 0;
@@ -129,6 +129,69 @@ public class cart_page extends AppCompatActivity {
         itemCount.setText(String.valueOf(itemCounter));
     }
 
+    @Override
+    public void onBackPressed() {
+        updateCartToServer(); // Gửi cập nhật lên server
+        super.onBackPressed(); // Quay về Activity trước đó
+    }
+
+    @Override
+    protected void onDestroy() {
+        updateCartToServer(); // Gửi cập nhật trước khi bị huỷ
+        super.onDestroy();
+    }
+
+    // Cập nhật lại quantity của mỗi CartItem
+    private void updateCartToServer() {
+        ArrayList<CartItemUpdateRequest> cartItemUpdateRequestList = new ArrayList<>();
+        for (CartItemModel item : cartItemModelList) {
+            int quantity = item.getQuantity();
+            Long id = item.getId();
+            cartItemUpdateRequestList.add(new CartItemUpdateRequest(id, quantity));
+        }
+
+        // Cập nhật lại số lượng mỗi CartItem dưới csdl
+        cartAPI.updateCartItems(cartItemUpdateRequestList).enqueue(new Callback<BooleanResponse>() {
+            @Override
+            public void onResponse(Call<BooleanResponse> call, Response<BooleanResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                    if (response.body().getCode() == 1000) {
+                        // Thành công, xử lý tiếp...
+                    }
+                } else {
+                    // Nếu response không thành công, parse lỗi từ errorBody
+                    try {
+                        // Nếu không có body, nghĩa là đã xảy ra lỗi
+                        Gson gson = new Gson();
+                        ErrorResponse errorResponse = gson.fromJson(response.errorBody().string(), ErrorResponse.class);
+
+                        if (errorResponse != null) {
+                            int errorCode = errorResponse.getCode();
+                            String errorMessage = errorResponse.getMessage();
+
+                            // Xử lý thông báo lỗi
+                            if (errorCode == 2007) {
+                                Toast.makeText(getApplicationContext(), "Số lượng hàng tồn kho không đủ", Toast.LENGTH_SHORT).show();
+                            } else if (errorCode == 2005) {
+                                Toast.makeText(getApplicationContext(), "Không tìm thấy sản phẩm trong giỏ hàng", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Lỗi: " + errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Lỗi không xác định", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BooleanResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
+    }
 }
