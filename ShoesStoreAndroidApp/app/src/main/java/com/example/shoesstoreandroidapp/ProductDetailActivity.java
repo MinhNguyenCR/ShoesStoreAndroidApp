@@ -63,6 +63,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         ratingBar = findViewById(R.id.ratingBar);
         sizeRecyclerView = (RecyclerView)findViewById(R.id.sizeRecyclerView);
         reviewRecyclerView = (RecyclerView)findViewById(R.id.rc_reviews);
+        TextView btnDecrease = findViewById(R.id.btnDecrease);
+        TextView btnIncrease = findViewById(R.id.btnIncrease);
+        TextView txtQuantity = findViewById(R.id.txtQuantity);
 
 
         // Lấy productName truyền từ ListProductAdapter
@@ -106,6 +109,22 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ProductDetailResponse> call, Throwable t) {
                 Toast.makeText(ProductDetailActivity.this, "Failed to load details", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Lắng nghe sự kiện người dùng nhấn nút +
+        btnIncrease.setOnClickListener(v -> {
+            int quantity = Integer.parseInt(txtQuantity.getText().toString());
+            quantity++;
+            txtQuantity.setText(String.valueOf(quantity));
+        });
+
+        // Lắng nghe sự kiện người dùng nhấn nút -
+        btnDecrease.setOnClickListener(v -> {
+            int quantity = Integer.parseInt(txtQuantity.getText().toString());
+            if (quantity > 1) {
+                quantity--;
+                txtQuantity.setText(String.valueOf(quantity));
             }
         });
 

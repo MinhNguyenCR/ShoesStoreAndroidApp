@@ -191,7 +191,5 @@ public class cart_page extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Lỗi: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 }
