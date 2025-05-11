@@ -69,7 +69,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
 
-        userApi = RetrofitClient.getRetrofit().create(AccountApi.class);
+//        userApi = RetrofitClient.getRetrofit().create(AccountApi.class);
         btnUpdateProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,7 +80,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                 try {
                     LocalDate dob = LocalDate.parse(dobString, formatter);
-                    AccountDetailRequest accountDetailRequest = new AccountDetailRequest(name, phone, dob);
+                    AccountDetailRequest accountDetailRequest = new AccountDetailRequest(name, phone);
                     updateUserDetail(userId, accountDetailRequest);
                 } catch (DateTimeParseException e) {
                     Toast.makeText(UserProfileActivity.this, "Invalid date format. Please use yyyy/MM/dd.", Toast.LENGTH_SHORT).show();
@@ -97,6 +97,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Log.d("UserProfile", "Updating details for user ID: " + id);
         Log.d("UserProfile", "New Details: " + accountDetailRequest);
 
+        userApi = RetrofitClient.getRetrofit().create(AccountApi.class);
         userApi.updateUserDetails(id, accountDetailRequest).enqueue(new Callback<ApiResponse<Boolean>>() {
             @Override
             public void onResponse(Call<ApiResponse<Boolean>> call, Response<ApiResponse<Boolean>> response) {
