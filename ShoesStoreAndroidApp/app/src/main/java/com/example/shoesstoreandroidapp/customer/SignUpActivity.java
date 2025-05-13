@@ -1,7 +1,9 @@
 package com.example.shoesstoreandroidapp.customer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,6 +38,13 @@ public class SignUpActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(v -> {
             if (validateForm()) {
                 verifyOtpAndRegister();
+            }
+        });
+        textSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -113,10 +122,10 @@ public class SignUpActivity extends AppCompatActivity {
         api.verifyOtp(otpRequest).enqueue(new Callback<ApiResponse<Boolean>>() {
             @Override
             public void onResponse(Call<ApiResponse<Boolean>> call, Response<ApiResponse<Boolean>> response) {
-                if (response.isSuccessful() && Boolean.TRUE.equals(response.body().getResult())) {
-                    registerAccount();  // OTP hợp lệ → gọi API đăng ký
+                if (response.isSuccessful()) {
+                    registerAccount();
                 } else {
-                    Log.d("OTP_CHECK", "Email: " + email + " | OTP: " + otp);
+                    Log.d("OTP_CHECK", "Email: " + otpRequest.getEmail() + " | OTP: " + otpRequest.getOtp());
 
                     Toast.makeText(SignUpActivity.this, "OTP verification failed!", Toast.LENGTH_SHORT).show();
                 }
@@ -142,9 +151,8 @@ public class SignUpActivity extends AppCompatActivity {
         api.register(request).enqueue(new Callback<ApiResponse<Boolean>>() {
             @Override
             public void onResponse(Call<ApiResponse<Boolean>> call, Response<ApiResponse<Boolean>> response) {
-                if (response.isSuccessful() && Boolean.TRUE.equals(response.body().getResult())) {
+                if (response.isSuccessful()) {
                     Toast.makeText(SignUpActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                    finish(); // hoặc chuyển sang màn hình đăng nhập
                 } else {
                     Toast.makeText(SignUpActivity.this, "Đăng ký thất bại!", Toast.LENGTH_SHORT).show();
                 }

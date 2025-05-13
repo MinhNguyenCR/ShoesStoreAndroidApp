@@ -114,7 +114,7 @@
             android:id="@+id/edtDob"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:hint="YYYY / MM / DD"
+            android:hint="YYYY-MM-DD"
             android:inputType="date"
             android:background= "@drawable/custom_edit_text_profile"
             android:paddingHorizontal="16dp"
