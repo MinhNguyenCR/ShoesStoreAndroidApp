@@ -31,4 +31,6 @@ public interface AccountAPI {
                 @Path("id") long userId,
                 @Body AccountDetailRequest accountDetailRequest
         );
+        @POST("/shoestore/account/forget-password")
+        Call<ApiResponse<Boolean>> resetPassword(@Body AccountSignUpRequest accountSignUpRequest);
 }
