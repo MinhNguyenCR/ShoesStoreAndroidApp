@@ -18,11 +18,13 @@ import java.util.List;
 public class sizeAdapter extends RecyclerView.Adapter<sizeAdapter.ViewHolder> {
     private List<String> sizes;
     private Context context;
-    private int selectedPosition = 0; // Chỉ số của nút được chọn
+    private int selectedPosition = 0;
+    private OnSizeSelectedListener listener;
 
-    public sizeAdapter(Context context, List<String> categories) {
+    public sizeAdapter(Context context, List<String> sizes, OnSizeSelectedListener listener) {
         this.context = context;
-        this.sizes = categories;
+        this.sizes = sizes;
+        this.listener = listener;
     }
 
     @NonNull
@@ -36,11 +38,7 @@ public class sizeAdapter extends RecyclerView.Adapter<sizeAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.sizeTextView.setText(sizes.get(position));
 
-        int adapterPosition = holder.getAdapterPosition();
-        if (adapterPosition == RecyclerView.NO_POSITION) return;
-
-        // Đổi màu khi được chọn
-        if (adapterPosition == selectedPosition) {
+        if (position == selectedPosition) {
             holder.sizeTextView.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_selected));
             holder.sizeTextView.setTextColor(Color.WHITE);
         } else {
@@ -48,13 +46,14 @@ public class sizeAdapter extends RecyclerView.Adapter<sizeAdapter.ViewHolder> {
             holder.sizeTextView.setTextColor(Color.BLACK);
         }
 
-        // Xử lý sự kiện click
         holder.sizeTextView.setOnClickListener(v -> {
-            selectedPosition = adapterPosition;
-            notifyDataSetChanged(); // Cập nhật UI
+            selectedPosition = holder.getAdapterPosition();
+            notifyDataSetChanged();
+            if (listener != null) {
+                listener.onSizeSelected(sizes.get(selectedPosition));
+            }
         });
     }
-
 
     @Override
     public int getItemCount() {
@@ -63,6 +62,7 @@ public class sizeAdapter extends RecyclerView.Adapter<sizeAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView sizeTextView;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             sizeTextView = itemView.findViewById(R.id.sizeTextView);

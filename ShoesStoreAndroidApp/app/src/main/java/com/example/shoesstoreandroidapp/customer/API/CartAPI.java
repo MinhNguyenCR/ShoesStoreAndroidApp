@@ -1,5 +1,6 @@
 package com.example.shoesstoreandroidapp.customer.API;
 
+import com.example.shoesstoreandroidapp.customer.Request.AddToCartRequest;
 import com.example.shoesstoreandroidapp.customer.Request.CartItemUpdateRequest;
 import com.example.shoesstoreandroidapp.customer.Request.LoginRequest;
 import com.example.shoesstoreandroidapp.customer.Response.BooleanResponse;
@@ -11,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
@@ -23,5 +25,8 @@ public interface CartAPI {
 
     @DELETE("shoestore/cart/delete/{cartItemId}")
     Call<BooleanResponse> deleteCartItemFromCart(@Path("cartItemId") Long cartItemId);
+
+    @POST("shoestore/cart/add")
+    Call<BooleanResponse> addToCart(@Body AddToCartRequest request);
 
 }
