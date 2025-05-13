@@ -6,11 +6,16 @@ import java.util.List;
 
 public class ProductResponse {
 
-                private int code;
-                private List<ProductModel> result;
+    private int code;
+    private List<ProductModel> result;
 
-                public int getCode() { return code; }
-                public List<ProductModel> getResult() { return result; }
+    public int getCode() {
+        return code;
+    }
+
+    public List<ProductModel> getResult() {
+        return result;
+    }
 
 
 }

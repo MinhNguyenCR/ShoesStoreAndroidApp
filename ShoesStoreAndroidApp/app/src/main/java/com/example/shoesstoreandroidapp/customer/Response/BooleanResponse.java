@@ -2,18 +2,16 @@ package com.example.shoesstoreandroidapp.customer.Response;
 
 public class BooleanResponse {
     private int code;
-    String message;
+    //String message;
     private Boolean result;
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-
+//    public String getMessage() {
+//        return message;
+//    }
+//
+//    public void setMessage(String message) {
+//        this.message = message;
+//    }
 
     public int getCode() {
         return code;
