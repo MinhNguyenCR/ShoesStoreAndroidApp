@@ -3,26 +3,26 @@ package com.example.shoesstoreandroidapp.customer;
 import java.time.LocalDate;
 
 public class AccountDetailRequest {
-    private String fullname;
+    private String name;
     private String phone;
-    //private LocalDate birthday;
+    private String birthday;
 
-//    public AccountDetailRequest(String fullname, String phone, LocalDate birthday) {
-//        this.fullname = fullname;
-//        this.phone = phone;
-//        this.birthday = birthday;
-//    }
-    public AccountDetailRequest(String fullname, String phone) {
-        this.fullname = fullname;
+    public AccountDetailRequest(String name, String phone, String birthday) {
+        this.name = name;
+        this.phone = phone;
+        this.birthday = birthday;
+    }
+    public AccountDetailRequest(String name, String phone) {
+        this.name = name;
         this.phone = phone;
     }
     // Getter/Setter
     public String getFullname() {
-        return fullname;
+        return name;
     }
 
     public void setFullname(String fullname) {
-        this.fullname = fullname;
+        this.name = fullname;
     }
 
     public String getPhone() {
@@ -33,12 +33,12 @@ public class AccountDetailRequest {
         this.phone = phone;
     }
 
-//    public LocalDate getBirthday() {
-//        return birthday;
-//    }
-//
-//    public void setBirthday(LocalDate birthday) {
-//        this.birthday = birthday;
-//    }
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
 }
 

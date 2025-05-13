@@ -55,7 +55,7 @@ public class cart_page extends AppCompatActivity {
 
         // Lấy userId từ SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        long accountId = sharedPreferences.getLong("userId", 4);  // Mặc định trả về 4 nếu không có
+        long accountId = sharedPreferences.getLong("userId", 4);
 
         // Gọi API lấy danh sách sản phẩm trong giỏ hàng
         cartItemModelList = new ArrayList<>();
