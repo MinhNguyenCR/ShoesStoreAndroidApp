@@ -3,7 +3,7 @@ package com.example.shoesstoreandroidapp.customer.Model;
 import java.util.List;
 
 public class ProductDetailModel {
-    private int id;
+    private long id;
     private String name;
     private String image;
     private double price;
@@ -11,7 +11,7 @@ public class ProductDetailModel {
     private float feedbackStar;
     private List<Integer> size;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
