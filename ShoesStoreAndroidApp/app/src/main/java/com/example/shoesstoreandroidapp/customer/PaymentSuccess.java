@@ -4,11 +4,13 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,13 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.shoesstoreandroidapp.R;
+import com.example.shoesstoreandroidapp.customer.Request.NotificationRequest;
+
+import java.time.LocalDateTime;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PaymentSuccess extends AppCompatActivity {
     Button btnToHomePage;
@@ -32,9 +41,9 @@ public class PaymentSuccess extends AppCompatActivity {
         double total = getIntent().getDoubleExtra("total", 0);
 
         createNotificationChannel();
-        showNotification("Thông báo", "Cảm ơn bạn đã đặt hàng. Hãy chuẩn bị tiền mặt " +
-                String.valueOf(total)+ "₫ khi nhận hàng");
 
+        showNotification("Thông báo", "Cảm ơn bạn đã đặt hàng. Chúng tôi sẽ giao hàng cho bạn sớm nhất");
+        pushNotification(total);
         btnToHomePage = findViewById(R.id.btnBackToHome);
         btnToHomePage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,4 +109,26 @@ public class PaymentSuccess extends AppCompatActivity {
             }
         }
     }
+
+    private void pushNotification(double total){
+        NotificationRequest notificationRequest = new NotificationRequest();
+        notificationRequest.setContent("Bạn đã thanh toán đơn hàng thành công, số tiền: "+String.valueOf(total)+ "₫");
+        notificationRequest.setTitle("Đặt hàng thành công");
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        long userId = sharedPreferences.getLong("userId", 4);
+        notificationRequest.setUser_id(userId);
+        NotificationApi notificationApi = RetrofitClient.getRetrofit().create(NotificationApi.class);
+        notificationApi.pushNotification(notificationRequest).enqueue(new Callback<ApiResponse<Boolean>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Boolean>> call, Response<ApiResponse<Boolean>> response) {
+                Toast.makeText(PaymentSuccess.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Boolean>> call, Throwable t) {
+
+            }
+        });
+    }
+
 }

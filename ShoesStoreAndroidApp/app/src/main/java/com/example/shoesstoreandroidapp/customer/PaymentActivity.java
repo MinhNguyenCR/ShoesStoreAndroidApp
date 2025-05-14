@@ -33,6 +33,10 @@ public class PaymentActivity extends AppCompatActivity {
         btnPay = findViewById(R.id.btnCreatePayment);
         webView = findViewById(R.id.webViewVnpay);
         webView.getSettings().setJavaScriptEnabled(true);
+        vnpayApi = RetrofitClient.getRetrofit().create(VnpayApi.class);
+        Intent intent = getIntent();
+        double total = intent.getDoubleExtra("total", 0);
+
 
         // Gắn WebViewClient để theo dõi quá trình thanh toán
         webView.setWebViewClient(new WebViewClient() {
@@ -40,6 +44,9 @@ public class PaymentActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains("vnp_ResponseCode=00")) {
                     Toast.makeText(PaymentActivity.this, "Thanh toán thành công!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(PaymentActivity.this, PaymentSuccess.class);
+                    intent.putExtra("total", total);
+                    startActivity(intent);
                 } else if (url.contains("vnp_ResponseCode")) {
                     Toast.makeText(PaymentActivity.this, "Thanh toán thất bại!", Toast.LENGTH_SHORT).show();
                 }
@@ -47,9 +54,6 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
 
-        vnpayApi = RetrofitClient.getRetrofit().create(VnpayApi.class);
-        Intent intent = getIntent();
-        double total = intent.getDoubleExtra("total", 0);
 
         btnPay.setOnClickListener(v -> {
             if (total > 0) {
