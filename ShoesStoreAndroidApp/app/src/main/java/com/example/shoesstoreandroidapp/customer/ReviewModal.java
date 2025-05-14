@@ -1,4 +1,4 @@
-package com.example.shoesstoreandroidapp;
+package com.example.shoesstoreandroidapp.customer;
 
 import java.io.Serializable;
 

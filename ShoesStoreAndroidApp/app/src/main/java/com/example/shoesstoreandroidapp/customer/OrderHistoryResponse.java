@@ -9,10 +9,13 @@ public class OrderHistoryResponse {
     private Double orderTotal;
     private String productName;
     private Integer quantity;
+    private Integer size;
     private String commune;
     private String detailedAddress;
     private String district;
     private String province;
+
+    private String image;
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
@@ -84,5 +87,21 @@ public class OrderHistoryResponse {
 
     public Integer getQuantity() {
         return quantity;
+    }
+
+    public Integer getSize() {
+        return size;
+    }
+
+    public void setSize(Integer size) {
+        this.size = size;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

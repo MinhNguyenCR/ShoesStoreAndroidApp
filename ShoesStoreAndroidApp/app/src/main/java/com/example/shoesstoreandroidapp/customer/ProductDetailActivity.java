@@ -1,4 +1,4 @@
-package com.example.shoesstoreandroidapp;
+package com.example.shoesstoreandroidapp.customer;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.shoesstoreandroidapp.R;
 import com.example.shoesstoreandroidapp.customer.API.CartAPI;
 import com.example.shoesstoreandroidapp.customer.API.FeedbackAPI;
 import com.example.shoesstoreandroidapp.customer.API.ProductAPI;
@@ -24,8 +25,6 @@ import com.example.shoesstoreandroidapp.customer.Request.AddToCartRequest;
 import com.example.shoesstoreandroidapp.customer.Response.BooleanResponse;
 import com.example.shoesstoreandroidapp.customer.Response.FeedbackResponse;
 import com.example.shoesstoreandroidapp.customer.Response.ProductDetailResponse;
-import com.example.shoesstoreandroidapp.customer.RetrofitClient;
-import com.example.shoesstoreandroidapp.customer.sizeAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

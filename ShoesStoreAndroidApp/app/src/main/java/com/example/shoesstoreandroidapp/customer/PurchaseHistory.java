@@ -1,6 +1,7 @@
 package com.example.shoesstoreandroidapp.customer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,9 +10,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -65,7 +63,9 @@ public class PurchaseHistory extends AppCompatActivity {
         });
 
 
-        Long userId = 6L;
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        long userId = sharedPreferences.getLong("userId", 4);
+
         OrderApi orderApi = RetrofitClient.getRetrofit().create(OrderApi.class);
         OrderHistoryAdapter adapter = new OrderHistoryAdapter(this, new ArrayList<>());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
