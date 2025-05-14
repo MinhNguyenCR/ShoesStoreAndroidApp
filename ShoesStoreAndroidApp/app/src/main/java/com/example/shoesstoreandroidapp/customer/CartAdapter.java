@@ -22,6 +22,7 @@ import com.example.shoesstoreandroidapp.customer.API.CartAPI;
 import com.example.shoesstoreandroidapp.customer.Model.CartItemModel;
 import com.example.shoesstoreandroidapp.customer.Response.BooleanResponse;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import retrofit2.Call;
@@ -70,7 +71,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         CartItemModel cartModel = mList.get(position);
         holder.tvName.setText(cartModel.getProductName());
         holder.tvSize.setText(String.valueOf(cartModel.getSize()));
-        holder.tvPrice.setText(String.valueOf(cartModel.getTotal_price()));
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        holder.tvPrice.setText(formatter.format(cartModel.getTotal_price()) );
         holder.quantity.setText(String.valueOf(cartModel.getQuantity()));
         Glide.with(context).load(cartModel.getImage()).into(holder.imgvImg);
     }
