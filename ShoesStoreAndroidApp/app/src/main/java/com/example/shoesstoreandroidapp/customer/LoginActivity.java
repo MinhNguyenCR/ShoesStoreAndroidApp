@@ -164,20 +164,20 @@ public class LoginActivity extends AppCompatActivity {
         AccountSignUpRequest request = new AccountSignUpRequest();
         request.setEmail(account.getEmail());
         request.setPassword("12345678");
+        request.setFullName("");
+        request.setPhone("");
         AccountAPI api = RetrofitClient.getRetrofit().create(AccountAPI.class);
         api.register(request).enqueue(new Callback<ApiResponse<Boolean>>() {
             @Override
             public void onResponse(Call<ApiResponse<Boolean>> call, Response<ApiResponse<Boolean>> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Đăng ký thất bại!", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<Boolean>> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Lỗi mạng tk lol", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Lỗi mạng", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -203,7 +203,6 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Incorrect email or password", Toast.LENGTH_SHORT).show();
                 }
             }
 
