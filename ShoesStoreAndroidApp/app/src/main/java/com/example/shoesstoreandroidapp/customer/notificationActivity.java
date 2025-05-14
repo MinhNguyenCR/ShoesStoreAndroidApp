@@ -1,6 +1,7 @@
 package com.example.shoesstoreandroidapp.customer;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
@@ -42,8 +43,8 @@ public class notificationActivity extends AppCompatActivity {
         imgbtnUser = findViewById(R.id.imgbtnUser);
         imgbtnOrderHistory = findViewById(R.id.imgbtnOrderHistory);
 
-        // Gọi API để lấy danh sách thông báo
-        long userId = 4; // ⚠️ Đổi thành user thực tế
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        long userId = sharedPreferences.getLong("userId", 4);
         NotificationApi api = RetrofitClient.getRetrofit().create(NotificationApi.class);
         api.getNotifications(userId).enqueue(new Callback<List<NotificationResponse>>() {
             @Override
