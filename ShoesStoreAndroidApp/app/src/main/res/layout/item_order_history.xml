@@ -81,6 +81,4 @@
         android:focusable="true"
         android:textSize="14sp" />
 
-
-
 </LinearLayout>
