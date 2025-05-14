@@ -80,24 +80,74 @@ public class ReviewProductActivity extends AppCompatActivity {
     private void submitReviews() {
         List<FeedbackRequest> feedbackList = adapter.getFeedbackRequests();
         FeedbackAPI feedbackAPI = RetrofitClient.getRetrofit().create(FeedbackAPI.class);
+        OrderApi orderApi = RetrofitClient.getRetrofit().create(OrderApi.class);
+
+        long orderId = getIntent().getLongExtra("orderId", -1);
+        if (orderId == -1) {
+            Toast.makeText(this, "Không tìm thấy mã đơn hàng!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (feedbackList.isEmpty()) {
+            Toast.makeText(this, "Không có nội dung đánh giá!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final int totalFeedbacks = feedbackList.size();
+        final int[] successCount = {0};
+        final boolean[] hasError = {false};
 
         for (FeedbackRequest feedback : feedbackList) {
             feedbackAPI.createFeedback(feedback).enqueue(new Callback<BooleanResponse>() {
                 @Override
                 public void onResponse(Call<BooleanResponse> call, Response<BooleanResponse> response) {
                     if (response.isSuccessful() && response.body() != null ) {
-                        Toast.makeText(ReviewProductActivity.this, "Gửi đánh giá thành công!", Toast.LENGTH_SHORT).show();
+                        successCount[0]++;
                     } else {
-                        Toast.makeText(ReviewProductActivity.this, "Không thể gửi đánh giá!", Toast.LENGTH_SHORT).show();
+                        hasError[0] = true;
+                    }
+
+                    if (successCount[0] + (hasError[0] ? 1 : 0) == totalFeedbacks) {
+                        if (!hasError[0]) {
+                            // Tất cả feedback thành công, gọi cập nhật trạng thái đơn hàng
+                            reviewOrder(orderId);
+                        } else {
+                            Toast.makeText(ReviewProductActivity.this, "Bạn chưa hoàn tất các đánh giá", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<BooleanResponse> call, Throwable t) {
-                    Log.e("Review", "Lỗi khi gửi đánh giá: " + t.getMessage());
-                    Toast.makeText(ReviewProductActivity.this, "Lỗi kết nối máy chủ!", Toast.LENGTH_SHORT).show();
+                    hasError[0] = true;
+
+                    if (successCount[0] + 1 == totalFeedbacks) {
+                        Toast.makeText(ReviewProductActivity.this, "Lỗi khi gửi đánh giá!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
         }
     }
+
+    private void reviewOrder(long orderId) {
+        OrderApi orderApi = RetrofitClient.getRetrofit().create(OrderApi.class);
+        orderApi.reviewOrder(orderId).enqueue(new Callback<BooleanResponse>() {
+            @Override
+            public void onResponse(Call<BooleanResponse> call, Response<BooleanResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Toast.makeText(ReviewProductActivity.this, "Đánh giá đơn hàng thành công!", Toast.LENGTH_SHORT).show();
+                    finish(); // Quay lại màn hình trước
+                } else {
+                    Toast.makeText(ReviewProductActivity.this, "Xảy ra lỗi trong quá trình nhận đánh giá!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BooleanResponse> call, Throwable t) {
+                Toast.makeText(ReviewProductActivity.this, "Lỗi kết nối khi đánh dấu đơn hàng!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
 }
