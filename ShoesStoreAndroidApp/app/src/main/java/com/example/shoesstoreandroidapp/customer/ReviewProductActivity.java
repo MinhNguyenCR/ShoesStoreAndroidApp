@@ -28,7 +28,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ReviewProductActivity extends AppCompatActivity {
-
     private RecyclerView recyclerView;
     private ReviewProductAdapter adapter;
     private Button btnSubmit;
@@ -79,6 +78,15 @@ public class ReviewProductActivity extends AppCompatActivity {
 
     private void submitReviews() {
         List<FeedbackRequest> feedbackList = adapter.getFeedbackRequests();
+
+        // Kiểm tra nếu bất kỳ feedback nào có rating = 0
+        for (FeedbackRequest feedback : feedbackList) {
+            if (feedback.getRate() == 0) {
+                Toast.makeText(this, "Bạn chưa hoàn thành đánh giá cho tất cả sản phẩm!", Toast.LENGTH_SHORT).show();
+                return; // Dừng lại, không gửi API
+            }
+        }
+
         FeedbackAPI feedbackAPI = RetrofitClient.getRetrofit().create(FeedbackAPI.class);
         OrderApi orderApi = RetrofitClient.getRetrofit().create(OrderApi.class);
 
@@ -112,7 +120,7 @@ public class ReviewProductActivity extends AppCompatActivity {
                             // Tất cả feedback thành công, gọi cập nhật trạng thái đơn hàng
                             reviewOrder(orderId);
                         } else {
-                            Toast.makeText(ReviewProductActivity.this, "Bạn chưa hoàn tất các đánh giá", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ReviewProductActivity.this, "Có lỗi trong quá trình đánh giá", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -137,6 +145,8 @@ public class ReviewProductActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(ReviewProductActivity.this, "Đánh giá đơn hàng thành công!", Toast.LENGTH_SHORT).show();
                     finish(); // Quay lại màn hình trước
+
+
                 } else {
                     Toast.makeText(ReviewProductActivity.this, "Xảy ra lỗi trong quá trình nhận đánh giá!", Toast.LENGTH_SHORT).show();
                 }
@@ -148,6 +158,4 @@ public class ReviewProductActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

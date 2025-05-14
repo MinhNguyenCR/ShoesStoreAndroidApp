@@ -1,5 +1,6 @@
 package com.example.shoesstoreandroidapp.customer;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -80,7 +81,6 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.tvOrderAddress.setText(order.getCommune() + ", " + order.getDetailedAddress() + ", " +
                 order.getDistrict() + ", " + order.getProvince());
 
-        // ⚠️ Xử lý trạng thái đánh giá
         if (order.getIsReview() == 1) {
             holder.tvReview.setText("Đã đánh giá");
             holder.tvReview.setTextColor(Color.parseColor("#F44336")); // đỏ
@@ -116,7 +116,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 intent.putStringArrayListExtra("productImagesList", new ArrayList<>(productImagesList));
                 intent.putExtra("orderId", currentOrderId);
 
-                context.startActivity(intent);
+               context.startActivity(intent);
+
             });
         }
     }
