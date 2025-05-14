@@ -18,7 +18,7 @@ import java.util.List;
 public class sizeAdapter extends RecyclerView.Adapter<sizeAdapter.ViewHolder> {
     private List<String> sizes;
     private Context context;
-    private int selectedPosition = 0;
+    private int selectedPosition = -1;
     private OnSizeSelectedListener listener;
 
     public sizeAdapter(Context context, List<String> sizes, OnSizeSelectedListener listener) {

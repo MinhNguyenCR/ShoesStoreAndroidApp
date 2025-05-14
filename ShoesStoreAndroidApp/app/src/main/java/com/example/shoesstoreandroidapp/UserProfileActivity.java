@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.shoesstoreandroidapp.customer.API.AccountAPI;
 import com.example.shoesstoreandroidapp.customer.AccountDetailRequest;
 import com.example.shoesstoreandroidapp.customer.ApiResponse;
+import com.example.shoesstoreandroidapp.customer.LoginActivity;
 import com.example.shoesstoreandroidapp.customer.PurchaseHistory;
 import com.example.shoesstoreandroidapp.customer.Response.UserDetailResponse;
 import com.example.shoesstoreandroidapp.customer.RetrofitClient;
@@ -42,7 +43,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     ImageButton imgbtnUser;
     ImageButton imgbtnHome;
-    ImageView imgAvatar;
+    ImageView imgAvatar, logoutBtn;
     ImageButton imgbtnNoti;
     ImageButton imgbtnOrderHistory;
     private EditText edtFullName, edtPhone, edtDob;
@@ -122,7 +123,25 @@ public class UserProfileActivity extends AppCompatActivity {
                 });
             }
         });
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove("userId");
+                editor.apply();
 
+                // Thông báo người dùng đã đăng xuất thành công
+                Toast.makeText(UserProfileActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+
+                // Chuyển hướng người dùng đến màn hình đăng nhập
+                Intent intent = new Intent(UserProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+
+                // Kết thúc Activity hiện tại (để người dùng không thể quay lại bằng nút back)
+                finish();
+            }
+        });
 
     }
     @Override
@@ -234,5 +253,6 @@ public class UserProfileActivity extends AppCompatActivity {
         edtDob = findViewById(R.id.edtDob);
         btnUpdateProfile = findViewById(R.id.btnUpdateProfile);
         imgAvatar = findViewById(R.id.imgAvatar);
+        logoutBtn = findViewById(R.id.logoutBtn);
     }
 }
