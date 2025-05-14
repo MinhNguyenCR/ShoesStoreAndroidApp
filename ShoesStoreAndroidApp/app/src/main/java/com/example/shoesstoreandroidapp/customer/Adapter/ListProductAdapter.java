@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.shoesstoreandroidapp.ProductDetailActivity;
+import com.example.shoesstoreandroidapp.customer.ProductDetailActivity;
 import com.example.shoesstoreandroidapp.R;
 import com.example.shoesstoreandroidapp.customer.Model.ProductModel;
 
