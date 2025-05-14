@@ -1,18 +1,24 @@
 package com.example.shoesstoreandroidapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.shoesstoreandroidapp.customer.API.AccountAPI;
 import com.example.shoesstoreandroidapp.customer.AccountDetailRequest;
 import com.example.shoesstoreandroidapp.customer.ApiResponse;
@@ -21,7 +27,9 @@ import com.example.shoesstoreandroidapp.customer.Response.UserDetailResponse;
 import com.example.shoesstoreandroidapp.customer.RetrofitClient;
 import com.example.shoesstoreandroidapp.customer.main_page;
 import com.example.shoesstoreandroidapp.customer.notificationActivity;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -34,11 +42,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
     ImageButton imgbtnUser;
     ImageButton imgbtnHome;
+    ImageView imgAvatar;
     ImageButton imgbtnNoti;
     ImageButton imgbtnOrderHistory;
     private EditText edtFullName, edtPhone, edtDob;
     private Button btnUpdateProfile;
-
+    private static final int REQUEST_IMAGE_PICK = 1002;
 
     private AccountAPI userApi;
     @Override
@@ -89,10 +98,61 @@ public class UserProfileActivity extends AppCompatActivity {
 
             }
         });
+        imgAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, REQUEST_IMAGE_PICK);
+                SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+                long accountId = sharedPreferences.getLong("userId", 4);
+                AccountAPI accountAPI = RetrofitClient.getRetrofit().create(AccountAPI.class);
+                accountAPI.getImageUrl(userId).enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Glide.with(UserProfileActivity.this)
+                                .load(response)
+                                .into(imgAvatar);
+                    }
 
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
 
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        long accountId = sharedPreferences.getLong("userId", 4);
+        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
+            Uri imageUri = data.getData();
+            if (imageUri != null) {
+                new UploadAvatarTask(this, accountId, imageUri, avatarUrl -> {
+                    Picasso.get().load(avatarUrl).into(imgAvatar);
+                }).execute();
+            }
+        }
+    }
+
+//    private void uploadImageToCloudinary(Uri imageUri) {
+//        // Chuyển URI thành Bitmap
+//        try {
+//            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+//
+//            // Upload lên Cloudinary
+//            new UploadImageTask(this).execute(bitmap);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     private void fillInBlank(long userId){
         userApi = RetrofitClient.getRetrofit().create(AccountAPI.class);
         userApi.getUserDetailByUserId(userId).enqueue(new Callback<UserDetailResponse>() {
@@ -100,6 +160,9 @@ public class UserProfileActivity extends AppCompatActivity {
             public void onResponse(Call<UserDetailResponse> call, Response<UserDetailResponse> response) {
                 if (response.isSuccessful()) {
                     UserDetailResponse userDetailResponse = response.body();
+                    Glide.with(UserProfileActivity.this)
+                            .load(userDetailResponse.getImage())
+                            .into(imgAvatar);
                     edtFullName.setText(userDetailResponse.getName());
                     edtPhone.setText(userDetailResponse.getNumber());
                     Log.d("CCC","name "+  userDetailResponse.getName());
@@ -115,6 +178,7 @@ public class UserProfileActivity extends AppCompatActivity {
                         }
 
                     }
+
                     Log.d("CCC", "Error response: " + response.errorBody());
 
 
@@ -169,5 +233,6 @@ public class UserProfileActivity extends AppCompatActivity {
         edtPhone = findViewById(R.id.edtPhone);
         edtDob = findViewById(R.id.edtDob);
         btnUpdateProfile = findViewById(R.id.btnUpdateProfile);
+        imgAvatar = findViewById(R.id.imgAvatar);
     }
 }
