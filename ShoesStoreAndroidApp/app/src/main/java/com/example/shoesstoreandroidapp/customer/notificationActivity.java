@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoesstoreandroidapp.R;
+import com.example.shoesstoreandroidapp.UserProfileActivity;
 
 import java.util.List;
 

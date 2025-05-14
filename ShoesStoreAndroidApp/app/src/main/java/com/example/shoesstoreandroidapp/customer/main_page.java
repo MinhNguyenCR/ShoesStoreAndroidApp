@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoesstoreandroidapp.R;
+import com.example.shoesstoreandroidapp.UserProfileActivity;
 import com.example.shoesstoreandroidapp.customer.API.CategoryAPI;
 import com.example.shoesstoreandroidapp.customer.API.ProductAPI;
 import com.example.shoesstoreandroidapp.customer.Adapter.ListProductAdapter;

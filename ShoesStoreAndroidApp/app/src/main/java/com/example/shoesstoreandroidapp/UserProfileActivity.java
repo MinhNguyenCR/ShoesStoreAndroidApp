@@ -1,4 +1,4 @@
-package com.example.shoesstoreandroidapp.customer;
+package com.example.shoesstoreandroidapp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,13 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.shoesstoreandroidapp.R;
+import com.example.shoesstoreandroidapp.customer.AccountApi;
+import com.example.shoesstoreandroidapp.customer.AccountDetailRequest;
+import com.example.shoesstoreandroidapp.customer.ApiResponse;
+import com.example.shoesstoreandroidapp.customer.PurchaseHistory;
+import com.example.shoesstoreandroidapp.customer.RetrofitClient;
+import com.example.shoesstoreandroidapp.customer.main_page;
+import com.example.shoesstoreandroidapp.customer.notificationActivity;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
