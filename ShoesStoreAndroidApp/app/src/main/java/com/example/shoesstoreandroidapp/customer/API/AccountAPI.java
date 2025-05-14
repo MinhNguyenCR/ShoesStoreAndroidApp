@@ -3,6 +3,7 @@ package com.example.shoesstoreandroidapp.customer.API;
 import com.example.shoesstoreandroidapp.customer.AccountDetailRequest;
 import com.example.shoesstoreandroidapp.customer.ApiResponse;
 import com.example.shoesstoreandroidapp.customer.Request.AccountSignUpRequest;
+import com.example.shoesstoreandroidapp.customer.Request.ImgRequest;
 import com.example.shoesstoreandroidapp.customer.Request.LoginRequest;
 import com.example.shoesstoreandroidapp.customer.Request.OTPRequest;
 import com.example.shoesstoreandroidapp.customer.Response.LoginResponse;
@@ -33,4 +34,8 @@ public interface AccountAPI {
         );
         @POST("/shoestore/account/forget-password")
         Call<ApiResponse<Boolean>> resetPassword(@Body AccountSignUpRequest accountSignUpRequest);
+        @POST("/shoestore/account/updateImage/{id}")
+        Call<ApiResponse<Boolean>> uploadImage(@Path("id") Long id, @Body ImgRequest imgRequest);
+        @GET("/shoestore/account/user/image/{id}")
+        Call<String> getImageUrl(@Path("id") Long id);
 }

@@ -6,6 +6,22 @@ public class UserDetailResponse {
     private String name;
     private String number;
     private String birthday;
+    private String image;
+
+    public UserDetailResponse(String name, String number, String birthday, String image) {
+        this.name = name;
+        this.number = number;
+        this.birthday = birthday;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getName() {
         return name;
