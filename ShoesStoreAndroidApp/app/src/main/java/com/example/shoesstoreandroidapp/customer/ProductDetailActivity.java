@@ -26,6 +26,7 @@ import com.example.shoesstoreandroidapp.customer.Response.BooleanResponse;
 import com.example.shoesstoreandroidapp.customer.Response.FeedbackResponse;
 import com.example.shoesstoreandroidapp.customer.Response.ProductDetailResponse;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -110,11 +111,16 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     private void displayProductInfo(ProductDetailModel product) {
         nameTextView.setText(product.getName());
-        priceTextView.setText(product.getPrice() + " VND");
+
+        // Format price
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        priceTextView.setText(formatter.format(product.getPrice()) + " VND");
+
         descTextView.setText(product.getDescription());
         ratingBar.setRating(product.getFeedbackStar());
         Glide.with(this).load(product.getImage()).into(imageView);
     }
+
 
     private void setupSizeRecyclerView(List<Integer> sizes) {
         List<String> sizeStrings = sizes.stream().map(String::valueOf).collect(Collectors.toList());

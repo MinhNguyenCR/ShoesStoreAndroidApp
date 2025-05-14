@@ -41,7 +41,12 @@ public class ListProductAdapter extends RecyclerView.Adapter<ListProductAdapter.
         ProductModel listProductModel = mList.get(position);
         holder.tvName.setText(listProductModel.getName());
         holder.tvPrice.setText(String.format("%,.0f VND", listProductModel.getPrice()));
-        holder.tvRating.setText(String.valueOf(listProductModel.getFeedbackStar()));
+
+        // Làm tròn số sao đánh giá đến 1 chữ số sau dấu phẩy
+        double rating = listProductModel.getFeedbackStar();
+        String formattedRating = String.format("%.1f", rating);  // Làm tròn đến 1 chữ số sau dấu phẩy
+        holder.tvRating.setText(formattedRating);
+
         Glide.with(context).load(listProductModel.getImage()).into(holder.imgvImage);
 
         holder.imgvImage.setOnClickListener(new View.OnClickListener() {
@@ -53,8 +58,6 @@ public class ListProductAdapter extends RecyclerView.Adapter<ListProductAdapter.
                 context.startActivity(intent);
             }
         });
-
-
     }
 
     @Override
