@@ -26,7 +26,7 @@ public interface OrderApi {
     @POST("shoestore/order/add")
     Call<ApiResponse<Boolean>> checkout(@Body OrderResquest orderResquest);
 
-    @PATCH("review/{orderId}")
+    @PATCH("shoestore/order/review/{orderId}")
     Call<BooleanResponse> reviewOrder(@Path("orderId") Long orderId);
 
 }
