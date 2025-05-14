@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +39,7 @@ public class PurchaseHistory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_purchase_history);
+
         thamchieu();
         imgbtnOrderHistory.setImageResource(R.drawable.list_icon_active);
         imgbtnNoti.setOnClickListener(new View.OnClickListener() {
@@ -92,4 +94,24 @@ public class PurchaseHistory extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.rcvOrderHistory);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1001 && resultCode == RESULT_OK && data != null) {
+            long reviewedOrderId = data.getLongExtra("orderId", -1);
+
+            if (reviewedOrderId != -1) {
+                for (OrderHistoryResponse order : orderHistoryAdapter.getOrderList()) {
+                    if (order.getOrderId() == reviewedOrderId) {
+                        order.setIsReview(1); // cập nhật trạng thái
+                    }
+                }
+
+                orderHistoryAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
 }

@@ -144,7 +144,12 @@ public class ReviewProductActivity extends AppCompatActivity {
             public void onResponse(Call<BooleanResponse> call, Response<BooleanResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Toast.makeText(ReviewProductActivity.this, "Đánh giá đơn hàng thành công!", Toast.LENGTH_SHORT).show();
-                    finish(); // Quay lại màn hình trước
+                   // finish(); // Quay lại màn hình trước
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("orderId", orderId); // truyền lại orderId đã đánh giá
+                    setResult(RESULT_OK, resultIntent);
+                    finish(); // Quay về
+
 
 
                 } else {

@@ -116,7 +116,9 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 intent.putStringArrayListExtra("productImagesList", new ArrayList<>(productImagesList));
                 intent.putExtra("orderId", currentOrderId);
 
-               context.startActivity(intent);
+               //context.startActivity(intent);
+                ((Activity) context).startActivityForResult(intent, 1001);
+
 
             });
         }
