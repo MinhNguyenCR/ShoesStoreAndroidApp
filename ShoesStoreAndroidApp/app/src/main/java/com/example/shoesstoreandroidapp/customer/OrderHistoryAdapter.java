@@ -2,6 +2,7 @@ package com.example.shoesstoreandroidapp.customer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,18 +53,18 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         return new OrderViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
-        // Nhóm các đơn hàng theo orderId
+        // Nhóm và lấy đơn hàng như bạn đã có
         Map<Long, List<OrderHistoryResponse>> groupedOrders = groupOrdersById();
         long currentOrderId = getUniqueOrderIds().get(position);
         List<OrderHistoryResponse> ordersInGroup = groupedOrders.get(currentOrderId);
 
-        OrderHistoryResponse order = ordersInGroup.get(0); // Chỉ lấy thông tin của đơn hàng đầu tiên trong nhóm
+        OrderHistoryResponse order = ordersInGroup.get(0); // Lấy 1 đơn hàng đại diện
         StringBuilder productsDescription = new StringBuilder();
         int totalQuantity = 0;
 
-        // Gom mô tả các sản phẩm và tính tổng số lượng
         for (OrderHistoryResponse groupedOrder : ordersInGroup) {
             productsDescription.append(groupedOrder.getQuantity())
                     .append("x")
@@ -79,37 +80,47 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         holder.tvOrderAddress.setText(order.getCommune() + ", " + order.getDetailedAddress() + ", " +
                 order.getDistrict() + ", " + order.getProvince());
 
-        // Click chuyển sang ReviewActivity
-        holder.tvReview.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ReviewProductActivity.class);
+        // ⚠️ Xử lý trạng thái đánh giá
+        if (order.getIsReview() == 1) {
+            holder.tvReview.setText("Đã đánh giá");
+            holder.tvReview.setTextColor(Color.parseColor("#F44336")); // đỏ
+            holder.tvReview.setClickable(false);
+            holder.tvReview.setEnabled(false); // tránh click
+        } else {
+            holder.tvReview.setText("Đánh giá");
+            holder.tvReview.setTextColor(Color.parseColor("#00BCD4")); // xanh
+            holder.tvReview.setClickable(true);
+            holder.tvReview.setEnabled(true);
 
-            // Danh sách lưu tên và ảnh sản phẩm duy nhất
-            List<String> productNamesList = new ArrayList<>();
-            List<String> productImagesList = new ArrayList<>();
+            // Gán sự kiện click nếu chưa đánh giá
+            holder.tvReview.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ReviewProductActivity.class);
 
-            // Dùng Set để tránh trùng tên sản phẩm
-            Map<String, String> uniqueProductMap = new HashMap<>();
+                List<String> productNamesList = new ArrayList<>();
+                List<String> productImagesList = new ArrayList<>();
+                Map<String, String> uniqueProductMap = new HashMap<>();
 
-            for (OrderHistoryResponse groupedOrder : ordersInGroup) {
-                String productName = groupedOrder.getProductName();
-                if (!uniqueProductMap.containsKey(productName)) {
-                    uniqueProductMap.put(productName, groupedOrder.getImage()); // lưu ảnh đầu tiên tìm được
+                for (OrderHistoryResponse groupedOrder : ordersInGroup) {
+                    String productName = groupedOrder.getProductName();
+                    if (!uniqueProductMap.containsKey(productName)) {
+                        uniqueProductMap.put(productName, groupedOrder.getImage());
+                    }
                 }
-            }
 
-            // Đưa dữ liệu từ map vào danh sách
-            for (Map.Entry<String, String> entry : uniqueProductMap.entrySet()) {
-                productNamesList.add(entry.getKey());
-                productImagesList.add(entry.getValue());
-            }
+                for (Map.Entry<String, String> entry : uniqueProductMap.entrySet()) {
+                    productNamesList.add(entry.getKey());
+                    productImagesList.add(entry.getValue());
+                }
 
-            // Truyền dữ liệu sang ReviewProductActivity
-            intent.putStringArrayListExtra("productNamesList", new ArrayList<>(productNamesList));
-            intent.putStringArrayListExtra("productImagesList", new ArrayList<>(productImagesList));
+                intent.putStringArrayListExtra("productNamesList", new ArrayList<>(productNamesList));
+                intent.putStringArrayListExtra("productImagesList", new ArrayList<>(productImagesList));
+                intent.putExtra("orderId", currentOrderId);
 
-            context.startActivity(intent);
-        });
+                context.startActivity(intent);
+            });
+        }
     }
+
 
     @Override
     public int getItemCount() {

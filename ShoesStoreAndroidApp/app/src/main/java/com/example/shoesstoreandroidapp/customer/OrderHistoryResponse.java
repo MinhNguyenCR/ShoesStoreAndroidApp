@@ -16,6 +16,15 @@ public class OrderHistoryResponse {
     private String province;
 
     private String image;
+    private Integer isReview;
+
+    public Integer getIsReview() {
+        return isReview;
+    }
+
+    public void setIsReview(Integer isReview) {
+        this.isReview = isReview;
+    }
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
