@@ -38,7 +38,7 @@ public class PaymentActivity extends AppCompatActivity {
         double total = intent.getDoubleExtra("total", 0);
 
 
-        // Gắn WebViewClient để theo dõi quá trình thanh toán
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
