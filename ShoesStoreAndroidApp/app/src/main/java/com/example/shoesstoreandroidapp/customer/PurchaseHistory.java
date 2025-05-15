@@ -93,27 +93,8 @@ public class PurchaseHistory extends AppCompatActivity {
         imgbtnUser = findViewById(R.id.imgbtnUser);
         imgbtnHome = findViewById(R.id.imgbtnHome);
         imgbtnNoti = findViewById(R.id.imgbtnNoti);
-
         recyclerView = findViewById(R.id.rcvOrderHistory);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1001 && resultCode == RESULT_OK && data != null) {
-            long reviewedOrderId = data.getLongExtra("orderId", -1);
-
-            if (reviewedOrderId != -1) {
-                for (OrderHistoryResponse order : orderHistoryAdapter.getOrderList()) {
-                    if (order.getOrderId() == reviewedOrderId) {
-                        order.setIsReview(1); // cập nhật trạng thái
-                    }
-                }
-
-                orderHistoryAdapter.notifyDataSetChanged();
-            }
-        }
-    }
 
 }
