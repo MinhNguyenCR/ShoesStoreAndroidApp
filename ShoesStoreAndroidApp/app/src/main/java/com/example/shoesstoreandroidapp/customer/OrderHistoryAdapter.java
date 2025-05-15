@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shoesstoreandroidapp.R;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,7 +76,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         }
 
         holder.tvOrderId.setText(String.valueOf(order.getOrderId()));
-        holder.tvOrderPrice.setText(String.valueOf(order.getOrderTotal()));
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        holder.tvOrderPrice.setText(formatter.format(order.getOrderTotal()) + " ₫");
         holder.tvOrderDate.setText(order.getOrderDate());
         holder.tvOrderDescription.setText(productsDescription.toString());
         holder.tvOrderAddress.setText(order.getCommune() + ", " + order.getDetailedAddress() + ", " +
@@ -116,8 +118,8 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
                 intent.putStringArrayListExtra("productImagesList", new ArrayList<>(productImagesList));
                 intent.putExtra("orderId", currentOrderId);
 
-               //context.startActivity(intent);
-                ((Activity) context).startActivityForResult(intent, 1001);
+                context.startActivity(intent);
+
 
 
             });
