@@ -1,5 +1,6 @@
 package com.example.shoesstoreandroidapp.customer;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -122,17 +123,21 @@ public class cart_page extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        cart_page.super.onBackPressed();
         updateCartToServer(new UpdateCartCallback() {
             @Override
             public void onSuccess() {
+
+
             }
 
             @Override
             public void onFailure(String message) {
-
+                //showDetailedErrorDialog(message);
             }
+
         });
-        cart_page.super.onBackPressed();
+
     }
 
     @Override
@@ -144,7 +149,7 @@ public class cart_page extends AppCompatActivity {
 
             @Override
             public void onFailure(String message) {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+
             }
         });
         super.onDestroy();
@@ -173,7 +178,8 @@ public class cart_page extends AppCompatActivity {
                             int errorCode = errorResponse.getCode();
                             String errorMessage = errorResponse.getMessage();
                             if (errorCode == 2007) {
-                                callback.onFailure("Số lượng hàng tồn kho không đủ");
+                                showDetailedErrorDialog(errorMessage); // Sử dụng hộp thoại
+                                callback.onFailure(errorMessage);
                             } else if (errorCode == 2005) {
                                 callback.onFailure("Không tìm thấy sản phẩm trong giỏ hàng");
                             } else {
@@ -193,4 +199,14 @@ public class cart_page extends AppCompatActivity {
             }
         });
     }
+
+    private void showDetailedErrorDialog(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle("Lỗi cập nhật giỏ hàng")
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
+
 }

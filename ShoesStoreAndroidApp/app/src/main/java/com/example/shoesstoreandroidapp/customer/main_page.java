@@ -74,7 +74,6 @@ public class main_page extends AppCompatActivity {
                     categoryAdapter = new categoryAdapter(main_page.this, categoryNames, new OnCategoryClickListener() {
                         @Override
                         public void onCategoryClick(String category) {
-                            // Không gọi lại API, dùng danh sách đã có
                             if (category.equals("All")) {
                                 listProductAdapter.updateList(listProduct);
                             } else {
@@ -119,7 +118,6 @@ public class main_page extends AppCompatActivity {
                     Toast.makeText(main_page.this, "Load failed", Toast.LENGTH_SHORT).show();
                 }
             });
-
 
         listProductAdapter = new ListProductAdapter(this, listProduct);
         recyclerView.setAdapter(listProductAdapter);
