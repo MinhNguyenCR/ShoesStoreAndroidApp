@@ -1,5 +1,6 @@
 package com.example.shoesstoreandroidapp.customer;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ public class PurchaseHistory extends AppCompatActivity {
         OrderHistoryAdapter adapter = new OrderHistoryAdapter(this, new ArrayList<>());
 
         orderApi.getOrderHistory(userId).enqueue(new Callback<ApiResponse<List<OrderHistoryResponse>>>() {
+            @SuppressLint("SuspiciousIndentation")
             @Override
             public void onResponse(Call<ApiResponse<List<OrderHistoryResponse>>> call, Response<ApiResponse<List<OrderHistoryResponse>>> response) {
                 if(response.isSuccessful() && response.body() != null)
