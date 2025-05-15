@@ -53,8 +53,6 @@ public class shoes_item_adapter extends RecyclerView.Adapter<shoes_item_adapter.
                     .into(holder.imgvImage);
 
         }
-        Log.d("Adapter", "Shoes Name: " + model.getShoesName());
-        Log.d("Adapter", "Shoes Rating: " + model.getRating());
     }
 
 

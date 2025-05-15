@@ -159,18 +159,6 @@ public class UserProfileActivity extends AppCompatActivity {
         }
     }
 
-//    private void uploadImageToCloudinary(Uri imageUri) {
-//        // Chuyển URI thành Bitmap
-//        try {
-//            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-//
-//            // Upload lên Cloudinary
-//            new UploadImageTask(this).execute(bitmap);
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private void fillInBlank(long userId){
         userApi = RetrofitClient.getRetrofit().create(AccountAPI.class);
@@ -184,9 +172,6 @@ public class UserProfileActivity extends AppCompatActivity {
                             .into(imgAvatar);
                     edtFullName.setText(userDetailResponse.getName());
                     edtPhone.setText(userDetailResponse.getNumber());
-                    Log.d("CCC","name "+  userDetailResponse.getName());
-                    Log.d("CCC","name "+  userDetailResponse.getNumber());
-                    Log.d("CCC","name "+  userDetailResponse.getBirthday());
                     if (userDetailResponse.getBirthday() != null) {
                         DateTimeFormatter formatter = null;
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -195,12 +180,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                             edtDob.setText(dob.format(formatter));
                         }
-
                     }
-
-                    Log.d("CCC", "Error response: " + response.errorBody());
-
-
                 } else {
                     Toast.makeText(UserProfileActivity.this, "Profile fail to be filled", Toast.LENGTH_LONG).show();
 

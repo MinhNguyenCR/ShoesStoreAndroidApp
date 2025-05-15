@@ -70,13 +70,15 @@ public class PurchaseHistory extends AppCompatActivity {
 
         OrderApi orderApi = RetrofitClient.getRetrofit().create(OrderApi.class);
         OrderHistoryAdapter adapter = new OrderHistoryAdapter(this, new ArrayList<>());
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+
         orderApi.getOrderHistory(userId).enqueue(new Callback<ApiResponse<List<OrderHistoryResponse>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<OrderHistoryResponse>>> call, Response<ApiResponse<List<OrderHistoryResponse>>> response) {
                 if(response.isSuccessful() && response.body() != null)
+
                     adapter.setOrderList(response.body().getResult());
+                    recyclerView.setLayoutManager(new LinearLayoutManager(PurchaseHistory.this));
+                    recyclerView.setAdapter(adapter);
             }
 
             @Override
