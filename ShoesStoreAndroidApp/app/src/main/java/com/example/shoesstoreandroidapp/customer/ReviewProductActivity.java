@@ -150,8 +150,6 @@ public class ReviewProductActivity extends AppCompatActivity {
                     setResult(RESULT_OK, resultIntent);
                     finish(); // Quay về
 
-
-
                 } else {
                     Toast.makeText(ReviewProductActivity.this, "Xảy ra lỗi trong quá trình nhận đánh giá!", Toast.LENGTH_SHORT).show();
                 }

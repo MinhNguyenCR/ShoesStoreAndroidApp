@@ -1,5 +1,6 @@
 package com.example.shoesstoreandroidapp.customer;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,8 +24,10 @@ import com.example.shoesstoreandroidapp.customer.Model.FeedbackModel;
 import com.example.shoesstoreandroidapp.customer.Model.ProductDetailModel;
 import com.example.shoesstoreandroidapp.customer.Request.AddToCartRequest;
 import com.example.shoesstoreandroidapp.customer.Response.BooleanResponse;
+import com.example.shoesstoreandroidapp.customer.Response.ErrorResponse;
 import com.example.shoesstoreandroidapp.customer.Response.FeedbackResponse;
 import com.example.shoesstoreandroidapp.customer.Response.ProductDetailResponse;
+import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -151,7 +154,6 @@ public class ProductDetailActivity extends AppCompatActivity {
                 Toast.makeText(this, "Vui lòng chọn size!", Toast.LENGTH_SHORT).show();
                 return;
             }
-
             SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
             long accountId = prefs.getLong("userId", 4); // mặc định 4
 
@@ -162,10 +164,32 @@ public class ProductDetailActivity extends AppCompatActivity {
             cartAPI.addToCart(request).enqueue(new Callback<BooleanResponse>() {
                 @Override
                 public void onResponse(Call<BooleanResponse> call, Response<BooleanResponse> response) {
-                    if (response.isSuccessful() && response.body() != null && response.body().getResult()) {
-                        Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(ProductDetailActivity.this, "Không thể thêm vào giỏ", Toast.LENGTH_SHORT).show();
+                    if (response.isSuccessful() && response.body() != null ) {
+                        if (response.body().getCode() == 1000){
+                            Toast.makeText(ProductDetailActivity.this, "Thêm vào giỏ hàng thành công", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(ProductDetailActivity.this, "Không thể thêm vào giỏ hàng", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    else{
+                        try {
+                            Gson gson = new Gson();
+                            ErrorResponse errorResponse = gson.fromJson(response.errorBody().string(), ErrorResponse.class);
+                            if (errorResponse != null) {
+                                int errorCode = errorResponse.getCode();
+                                String errorMessage = errorResponse.getMessage();
+                                if (errorCode == 2007 || errorCode == 2009) {
+                                    showMessageBox(errorResponse.getMessage());
+                                }
+
+                                else {
+                                    Toast.makeText(ProductDetailActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
@@ -204,4 +228,12 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
     }
+    private void showMessageBox(String message) {
+        new AlertDialog.Builder(ProductDetailActivity.this)
+                .setTitle("Thông báo")
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .show();
+    }
+
 }

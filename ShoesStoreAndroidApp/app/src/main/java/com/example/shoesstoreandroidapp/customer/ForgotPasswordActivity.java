@@ -140,7 +140,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true;
     }
 }

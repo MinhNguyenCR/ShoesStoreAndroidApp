@@ -90,7 +90,6 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show();
             return;
         }
-
         AccountAPI api = RetrofitClient.getRetrofit().create(AccountAPI.class);
         Call<ApiResponse<String>> call = api.generateOtp(email);
         call.enqueue(new Callback<ApiResponse<String>>() {
@@ -102,7 +101,6 @@ public class SignUpActivity extends AppCompatActivity {
                     Toast.makeText(SignUpActivity.this, "Failed to send OTP", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(Call<ApiResponse<String>> call, Throwable t) {
                 Toast.makeText(SignUpActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
